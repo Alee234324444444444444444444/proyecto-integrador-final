@@ -1,0 +1,43 @@
+/* Foro */
+.foro {
+  background-color: #151d26;
+  border-radius: 15px;
+  padding: 20px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  margin-top: 30px;
+  width: 80%;
+  margin: 0 auto;
+}
+
+.foro h3 {
+  text-align: center;
+  color: #f9fafb;
+  margin-bottom: 15px;
+}
+
+.foro-textarea {
+  width: 100%;
+  color: #f9fafb;
+  background-color: #304d73;
+  border: 1px solid #f9fafb;
+  border-radius: 10px;
+  font-size: 1em;
+  padding: 2px;
+  margin-bottom: 15px;
+}
+
+.btn-publicar {
+  background-color: #81231e;
+  color: white;
+  font-weight: 600;
+  padding: 10px 20px;
+  border-radius: 10px;
+  cursor: pointer;
+  display: block;
+  margin: 0 auto;
+  transition: background-color 0.3s;
+}
+
+.btn-publicar:hover {
+  background-color: #a66414;
+}
