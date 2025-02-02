@@ -12,8 +12,8 @@
 }
 
 .navbar-brand .logo img {
-  width: 80px;
-  height: 55px; 
+  width: 100px;
+  height: 90px; 
   border-radius: 15px; 
   object-fit: fill; 
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
