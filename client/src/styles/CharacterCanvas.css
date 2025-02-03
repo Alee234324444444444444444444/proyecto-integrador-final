@@ -2,11 +2,12 @@
 .caracter {
   text-align: center;
   margin: 50px auto;
-  background-color: #000000;
+  background-color: #151d26;
   color: #f4f0e5;
   padding: 50px;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   max-width: 600px;
+  border-radius: 100px;
 }
 
 .caracter h1 {
@@ -16,7 +17,7 @@
 }
 
 canvas {
-  border-radius: 10px;
+  border-radius: 150px;
   background-color: #594b39;
   margin: 20px auto;
   display: block;

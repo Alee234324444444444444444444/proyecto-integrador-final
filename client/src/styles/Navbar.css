@@ -38,6 +38,17 @@
   background-color: #426a8c;
 }
 
+.navbar-actions {
+  display: flex;
+  align-items: center;
+  gap: 15px; /* Espacio entre el mensaje y el botón */
+}
+
+.login-btn {
+  /* Mantén tus estilos actuales del botón */
+  white-space: nowrap; /* Evita que el texto se rompa en múltiples líneas */
+}
+
 .navbar-actions .login-btn {
   background-color: #81231e;
   color: white;
@@ -52,4 +63,9 @@
 
 .navbar-actions .login-btn:hover {
   background-color: #a66414;
+}
+
+.welcome-message {
+  color: #f0f4f8; 
+  font-weight: 500;
 }
