@@ -17,13 +17,12 @@
 }
 
 canvas {
-  border-radius: 1px;
+  border-radius: 150px;
   background-color: #594b39;
   margin: 20px auto;
   display: block;
   width: 600px; 
   height: 600px;
-  
 }
 
 .actions {

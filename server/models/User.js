@@ -24,10 +24,15 @@ const User = sequelize.define('User', {
   password: {
     type: DataTypes.STRING(250),
     allowNull: false
+  },
+  googleId: {  // Añadimos este campo
+    type: DataTypes.STRING(255),
+    allowNull: true,
+    unique: true
   }
 }, {
-  tableName: 'users', // Relación con la tabla 'users' en PostgreSQL
-  timestamps: false   // Si no usas createdAt o updatedAt
+  tableName: 'users',
+  timestamps: false
 });
 
 module.exports = User;
