@@ -1,24 +1,54 @@
 const express = require('express');
 const router = express.Router();
-const User = require('../models/User');
+const { User } = require('../models');
 const jwt = require('jsonwebtoken');
+const bcrypt = require('bcrypt'); 
 
 // Registro
 router.post('/register', async (req, res) => {
   try {
-    const { username, password } = req.body;
+    const { name, username, email, password } = req.body;
 
-    const userExists = await User.findOne({ username });
+    // Verificar si el usuario ya existe
+    const userExists = await User.findOne({ 
+      where: { 
+        username: username 
+      } 
+    });
+
     if (userExists) {
       return res.status(400).json({ message: 'El usuario ya existe' });
     }
 
-    const user = new User({ username, password });
-    await user.save();
+    // Hashear el password
+    const hashedPassword = await bcrypt.hash(password, 10);
 
-    const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET, { expiresIn: '24h' });
-    res.status(201).json({ token });
+    // Crear el usuario
+    const user = await User.create({
+      name,
+      username,
+      email,
+      password: hashedPassword
+    });
+
+    // Generar token
+    const token = jwt.sign(
+      { userId: user.id }, 
+      process.env.JWT_SECRET, 
+      { expiresIn: '24h' }
+    );
+
+    res.status(201).json({ 
+      token,
+      user: {
+        id: user.id,
+        username: user.username,
+        email: user.email
+      }
+    });
+
   } catch (error) {
+    console.error('Error en registro:', error);
     res.status(500).json({ message: 'Error en el servidor' });
   }
 });
@@ -28,23 +58,44 @@ router.post('/login', async (req, res) => {
   try {
     const { username, password } = req.body;
 
-    const user = await User.findOne({ username });
+    // Buscar usuario
+    const user = await User.findOne({ 
+      where: { 
+        username: username 
+      } 
+    });
+
     if (!user) {
       return res.status(400).json({ message: 'Credenciales inválidas' });
     }
 
-    const isMatch = await user.comparePassword(password);
-    if (!isMatch) {
+    // Verificar password
+    const isValidPassword = await bcrypt.compare(password, user.password);
+    
+    if (!isValidPassword) {
       return res.status(400).json({ message: 'Credenciales inválidas' });
     }
 
-    const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET, { expiresIn: '24h' });
-    res.json({ token });
+    // Generar token
+    const token = jwt.sign(
+      { userId: user.id }, 
+      process.env.JWT_SECRET, 
+      { expiresIn: '24h' }
+    );
+
+    res.json({ 
+      token,
+      user: {
+        id: user.id,
+        username: user.username,
+        email: user.email
+      }
+    });
+
   } catch (error) {
-    console.error('Error en el servidor durante login:', error);
+    console.error('Error en login:', error);
     res.status(500).json({ message: 'Error en el servidor' });
   }
 });
-
 
 module.exports = router;

@@ -1,18 +1,18 @@
 const { DataTypes } = require('sequelize');
 const sequelize = require('../config/database');
 
-const User = sequelize.define('User', {
+const Superuser = sequelize.define('Superuser', {
   id: {
     type: DataTypes.INTEGER,
     primaryKey: true,
     autoIncrement: true
   },
   name: {
-    type: DataTypes.STRING(200),
+    type: DataTypes.STRING(255),
     allowNull: false
   },
   username: {
-    type: DataTypes.STRING(200),
+    type: DataTypes.STRING(255),
     allowNull: false,
     unique: true
   },
@@ -22,12 +22,12 @@ const User = sequelize.define('User', {
     unique: true
   },
   password: {
-    type: DataTypes.STRING(250),
+    type: DataTypes.STRING(255),
     allowNull: false
   }
 }, {
-  tableName: 'users', // Relación con la tabla 'users' en PostgreSQL
-  timestamps: false   // Si no usas createdAt o updatedAt
+  tableName: 'superuser', // Relación con la tabla 'superuser' en PostgreSQL
+  timestamps: false
 });
 
-module.exports = User;
+module.exports = Superuser;
