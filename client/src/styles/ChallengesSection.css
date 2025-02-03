@@ -1,7 +1,7 @@
-/* Contenedor de Desafíos */
+/* ChallengesContainer.css */
 .challenges-container {
-  margin: 30px auto;
-  padding: 20px;
+  margin: 20px auto;
+  padding: 15px;
   background-color: #2d4459;
   color: #f0f4f8;
   border-radius: 15px;
@@ -19,10 +19,11 @@
 .challenges-container li {
   background-color: #426a8c;
   margin: 10px 0;
-  padding: 15px;
+  padding: 10px;
   border-radius: 10px;
   border: 1px solid #f9fafb;
   display: flex;
+  flex-wrap: wrap;
   justify-content: space-between;
   align-items: center;
 }
@@ -35,8 +36,17 @@
   border-radius: 10px;
   cursor: pointer;
   transition: background-color 0.3s;
+  width: 100%;
+  max-width: 150px;
 }
 
 .challenges-container button:hover {
   background-color: #81231e;
+}
+
+/* Media Queries */
+@media (max-width: 768px) {
+  .challenges-container {
+    width: 100%;
+  }
 }
