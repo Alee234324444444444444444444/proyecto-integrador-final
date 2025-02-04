@@ -2,38 +2,56 @@ const express = require('express');
 const { Comment, User } = require('../models');
 const router = express.Router();
 
-// Ruta para obtener los comentarios
-router.get('/comments', async (req, res) => {
+// Obtener comentarios (GET /comments)
+router.get('/', async (req, res) => {
   try {
     const comments = await Comment.findAll({
-      include: [{ model: User, attributes: ['username'] }]  // Incluir el nombre de usuario en la respuesta
+      include: [{ 
+        model: User,
+        attributes: ['username'] 
+      }],
+      order: [['created_at', 'DESC']] // Ordenar por fecha de creación
     });
     res.json(comments);
   } catch (error) {
+    console.error('Error al obtener comentarios:', error);
     res.status(500).json({ error: 'Hubo un problema al obtener los comentarios.' });
   }
 });
 
-// Ruta para agregar un comentario
-router.post('/comments', async (req, res) => {
+// Agregar comentario (POST /comments)
+router.post('/', async (req, res) => {
   const { username, content } = req.body;
 
   try {
-    // Buscar al usuario por nombre de usuario
-    const user = await User.findOne({ where: { username: username } });
+    // Buscar al usuario
+    const user = await User.findOne({ 
+      where: { username: username } 
+    });
 
     if (!user) {
       return res.status(404).json({ error: 'Usuario no encontrado' });
     }
 
-    // Crear el comentario asociado al usuario encontrado
+    // Crear comentario
     const newComment = await Comment.create({
-      user_id: user.id,  // Asociar el comentario con el usuario
       content: content,
+      user_id: user.id,
+      created_at: new Date()
     });
 
-    res.status(201).json(newComment);  // Devolver el comentario creado
+    // Obtener el comentario con la información del usuario
+    const commentWithUser = await Comment.findOne({
+      where: { id: newComment.id },
+      include: [{ 
+        model: User,
+        attributes: ['username'] 
+      }]
+    });
+
+    res.status(201).json(commentWithUser);
   } catch (error) {
+    console.error('Error al crear comentario:', error);
     res.status(500).json({ error: 'Hubo un problema al agregar el comentario.' });
   }
 });

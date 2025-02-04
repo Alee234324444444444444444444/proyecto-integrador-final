@@ -4,6 +4,8 @@ import axios from 'axios';
 import { useAuth } from '../context/AuthContext'; // Importa correctamente el hook
 import '../styles/Forum.css';
 
+const BASE_URL = 'http://localhost:3000';
+
 function Forum() {
   const { user, isAuthenticated } = useAuth();  // Corregido aquí
   const [comments, setComments] = useState([]);
@@ -14,7 +16,7 @@ function Forum() {
     const fetchComments = async () => {
       try {
         console.log('Intentando obtener comentarios...');
-        const response = await axios.get('/comments'); // Asegúrate de que la URL sea '/comments'
+        const response = await axios.get(`${BASE_URL}/comments`);
         console.log('Comentarios obtenidos:', response.data);
         if (response.status === 200) {
           setComments(response.data);
@@ -63,8 +65,8 @@ function Forum() {
 
     try {
       console.log('Enviando el comentario a la API...');
-      const response = await axios.post('/comments', {  // Cambié la URL a '/comments'
-        username: user.name, // Nombre del usuario
+      const response = await axios.post(`${BASE_URL}/comments`, {  // Cambié la URL a '/comments'
+        username: user.username, // Nombre del usuario
         content: newComment,
       });
 
@@ -121,12 +123,16 @@ function Forum() {
 
       <ul className="comentarios">
         {comments.length > 0 ? (
-          comments.map((comment, index) => (
-            <li key={index} className="comentario-item">
+          comments.map((comment) => (
+            <li key={comment.id} className="comentario-item">
               <div className="comentario-box">
                 <p>
-                  <strong>{comment.User ? comment.User.username : 'Usuario Anónimo'}</strong>: {comment.content}
+                  <strong>{comment.User?.username || 'Usuario Anónimo'}</strong>
+                  <span className="comment-date">
+                    {new Date(comment.created_at).toLocaleString()}
+                  </span>
                 </p>
+                <p className="comment-content">{comment.content}</p>
               </div>
             </li>
           ))
