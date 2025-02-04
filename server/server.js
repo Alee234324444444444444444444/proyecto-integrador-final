@@ -2,8 +2,16 @@ const express = require('express');
 const { sequelize } = require('./models');
 require('dotenv').config();
 const cors = require('cors');
-
+const challengeRoutes = require('./routes/challenges');
 const app = express();
+
+sequelize.sync({ alter: true })  // Modifica la base de datos para que coincida con los modelos
+  .then(() => {
+    console.log('Modelos sincronizados con la base de datos');
+  })
+  .catch((error) => {
+    console.error('Error al sincronizar modelos:', error);
+  });
 
 // Configuración de CORS - Añadir esto antes de los otros middlewares
 app.use(cors({
@@ -17,6 +25,7 @@ app.use(express.urlencoded({ extended: true }));
 
 // Rutas
 app.use('/api/auth', require('./routes/auth'));
+app.use('/api/challenges', challengeRoutes);
 
 // Aquí otras rutas que requieran autenticación
 // app.use('/api/challenges', require('./routes/challenges'));

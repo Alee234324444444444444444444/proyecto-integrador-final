@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const { User} = require('../models');
+const { Superuser, User } = require('../models');
 const { Op } = require('sequelize');
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt'); 
@@ -59,38 +59,37 @@ router.post('/login', async (req, res) => {
   try {
     const { username, password } = req.body;
 
-    // Buscar usuario
-    const user = await User.findOne({ 
-      where: { 
-        username: username 
-      } 
-    });
+    if (!username || !password) {
+      return res.status(400).json({ message: 'Usuario y contraseña son obligatorios' });
+    }
+
+    // Verificar si el usuario es superusuario
+    let user = await Superuser.findOne({ where: { username } });
+
+    // Si no es superusuario, buscar en la tabla de usuarios normales
+    if (!user) {
+      user = await User.findOne({ where: { username } });
+    }
 
     if (!user) {
-      return res.status(400).json({ message: 'Credenciales inválidas' });
+      return res.status(400).json({ message: 'Usuario no encontrado' });
     }
 
-    // Verificar password
     const isValidPassword = await bcrypt.compare(password, user.password);
-    
     if (!isValidPassword) {
-      return res.status(400).json({ message: 'Credenciales inválidas' });
+      return res.status(400).json({ message: 'Contraseña incorrecta' });
     }
 
-    // Generar token
-    const token = jwt.sign(
-      { userId: user.id }, 
-      process.env.JWT_SECRET, 
-      { expiresIn: '24h' }
-    );
+    const token = jwt.sign({ userId: user.id, isSuperuser: !!user.superuser }, process.env.JWT_SECRET, { expiresIn: '24h' });
 
-    res.json({ 
+    res.json({
       token,
       user: {
         id: user.id,
         username: user.username,
-        email: user.email
-      }
+        email: user.email,
+        isSuperuser: !!user.superuser
+      },
     });
 
   } catch (error) {

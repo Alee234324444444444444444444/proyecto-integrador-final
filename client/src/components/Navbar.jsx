@@ -24,6 +24,7 @@ function Navbar() {
         <li><Link to="/">Inicio</Link></li>
         <li><Link to="/publicaciones">Publicaciones</Link></li>
         <li><Link to="/challenges">Desafíos</Link></li>
+        {user?.is_superuser && <Link to="/admin/add-challenge">Agregar Desafío</Link>}
       </ul>
       <div className="navbar-actions">
         {isAuthenticated ? (

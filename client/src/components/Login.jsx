@@ -56,19 +56,23 @@ function Login() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (!formData.username || !formData.password) {
+      Swal.fire('Error', 'Por favor completa todos los campos', 'error');
+      return;
+    }
+  
     try {
       const response = await axios.post('http://localhost:3000/api/auth/login', formData);
       localStorage.setItem('token', response.data.token);
       localStorage.setItem('user', JSON.stringify(response.data.user));
       login(response.data.user);
-
       navigate('/');
     } catch (error) {
       console.error('Error en login:', error);
       Swal.fire({
         icon: 'error',
         title: 'Error',
-        text: error.response?.data?.message || 'Usuario o contraseña incorrectos',
+        text: error.response?.data?.message || 'Error al iniciar sesión',
       });
     }
   };
