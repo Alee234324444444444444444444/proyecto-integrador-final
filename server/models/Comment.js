@@ -16,9 +16,21 @@ const Comment = sequelize.define('Comment', {
     type: DataTypes.DATE,
     defaultValue: DataTypes.NOW
   },
-  user_id: {  // Este campo debe existir para la relación
+  user_id: {
     type: DataTypes.INTEGER,
-    allowNull: false
+    allowNull: false,
+    references: {
+      model: User,
+      key: 'id'
+    }
+  },
+  parent_id: {  // Para manejar respuestas a comentarios
+    type: DataTypes.INTEGER,
+    allowNull: true,
+    references: {
+      model: 'comment', // Se autoreferencia
+      key: 'id'
+    }
   }
 }, {
   tableName: 'comment',
@@ -27,5 +39,7 @@ const Comment = sequelize.define('Comment', {
 
 // Relación con User
 Comment.belongsTo(User, { foreignKey: 'user_id', onDelete: 'CASCADE' });
+// Relación para respuestas
+Comment.hasMany(Comment, { as: 'replies', foreignKey: 'parent_id' });
 
 module.exports = Comment;
