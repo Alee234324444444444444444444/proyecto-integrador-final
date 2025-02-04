@@ -15,6 +15,10 @@ const Comment = sequelize.define('Comment', {
   created_at: {
     type: DataTypes.DATE,
     defaultValue: DataTypes.NOW
+  },
+  user_id: {  // Este campo debe existir para la relación
+    type: DataTypes.INTEGER,
+    allowNull: false
   }
 }, {
   tableName: 'comment',
