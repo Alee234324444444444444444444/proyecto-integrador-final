@@ -6,29 +6,30 @@
   margin-top: 30px;
   width: 80%;
   margin: 0 auto;
-  max-width: 1200px; 
+  max-width: 1200px;
 }
 
 .foro h3 {
   text-align: center;
   color: #f9fafb;
   margin-bottom: 15px;
-  font-size: 1.5rem; 
+  font-size: 1.5rem;
 }
 
 .foro-textarea {
-  width: 100%;
+  width: 98%;
   color: #f9fafb;
   background-color: #304d73;
   border: 1px solid #f9fafb;
   border-radius: 10px;
   font-size: 1em;
-  padding: 10px; 
+  padding: 10px;
   margin-bottom: 15px;
-  min-height: 100px; 
-  resize: vertical; 
+  min-height: 100px;
+  resize: vertical;
 }
 
+/* Botón Publicar */
 .btn-publicar {
   background-color: #81231e;
   color: white;
@@ -36,21 +37,40 @@
   padding: 10px 20px;
   border-radius: 10px;
   cursor: pointer;
-  display: block;
-  margin: 0 auto;
+  display: inline-block;
+  margin: 5px 0;
   transition: background-color 0.3s;
-  width: auto; 
-  min-width: 120px; 
+  width: auto;
+  min-width: 120px;
 }
 
 .btn-publicar:hover {
   background-color: #a66414;
 }
 
+/* Botones de acciones de comentarios (Eliminar, Responder, Modificar) */
+.comment-actions button {
+  background-color: #81231e;
+  color: white;
+  font-weight: 600;
+  padding: 10px 20px;
+  border-radius: 10px;
+  cursor: pointer;
+  display: inline-block;
+  margin: 5px 0;
+  transition: background-color 0.3s;
+  width: auto;
+  min-width: 120px;
+}
+
+.comment-actions button:hover {
+  background-color: #a66414;
+}
+
 .comentario-item {
   list-style: none;
   margin-bottom: 15px;
-  width: 100%; 
+  width: 100%;
 }
 
 .comentario-box {
@@ -58,19 +78,19 @@
   padding: 15px;
   border-radius: 8px;
   color: #f9fafb;
-  word-wrap: break-word; 
+  word-wrap: break-word;
 }
 
 .comment-date {
   font-size: 0.8em;
   color: #ccc;
   margin-left: 10px;
-  display: inline-block; 
+  display: inline-block;
 }
 
 .comment-content {
   margin-top: 8px;
-  line-height: 1.4; 
+  line-height: 1.4;
 }
 
 .comentarios {
@@ -98,7 +118,13 @@
   }
 
   .btn-publicar {
-    width: 100%; 
+    width: 100%;
+    max-width: none;
+    
+  }
+
+  .comment-actions button {
+    width: 100%;
     max-width: none;
   }
 }
@@ -124,7 +150,7 @@
   }
 
   .comment-date {
-    display: block; 
+    display: block;
     margin-left: 0;
     margin-top: 5px;
   }
@@ -159,8 +185,7 @@
 
 /* Ajustes de accesibilidad */
 @media (prefers-reduced-motion: reduce) {
-  .btn-publicar {
+  .btn-publicar, .comment-actions button {
     transition: none;
   }
 }
-
