@@ -1,143 +1,254 @@
 import React, { useState, useEffect } from 'react';
 import Swal from 'sweetalert2';
 import axios from 'axios';
-import { useAuth } from '../context/AuthContext'; // Importa correctamente el hook
+import { useAuth } from '../context/AuthContext';
 import '../styles/Forum.css';
 
 const BASE_URL = 'http://localhost:3000';
 
 function Forum() {
-  const { user, isAuthenticated } = useAuth();  // Corregido aquí
+  const { user, isAuthenticated } = useAuth();
   const [comments, setComments] = useState([]);
   const [newComment, setNewComment] = useState('');
+  const [editingComment, setEditingComment] = useState(null);
+  const [editingContent, setEditingContent] = useState('');
+  const [replyingTo, setReplyingTo] = useState(null);
+  const [replyContent, setReplyContent] = useState('');
 
-  // Cargar los comentarios desde la base de datos al cargar el componente
   useEffect(() => {
     const fetchComments = async () => {
       try {
-        console.log('Intentando obtener comentarios...');
         const response = await axios.get(`${BASE_URL}/comments`);
-        console.log('Comentarios obtenidos:', response.data);
         if (response.status === 200) {
           setComments(response.data);
-        } else {
-          throw new Error(`Error al cargar los comentarios: Status ${response.status}`);
         }
       } catch (error) {
-        console.error('Error al cargar los comentarios:', error);
-        Swal.fire({
-          icon: 'error',
-          title: 'Error al cargar comentarios',
-          text: `Hubo un problema al cargar los comentarios. ${error.response ? `Código de error: ${error.response.status} - ${error.response.statusText}` : error.message}`,
-          footer: '<strong>Posibles soluciones:</strong><br>- Verifica tu conexión a internet.<br>- Intenta refrescar la página.<br>- Si el problema persiste, contacta al administrador.',
-        });
+        console.error('Error al cargar comentarios:', error);
       }
     };
-
     fetchComments();
   }, []);
 
-  // Manejar la publicación de un nuevo comentario
   const handlePostComment = async () => {
-    console.log('Intentando publicar un nuevo comentario...', newComment);
-
-    if (!newComment.trim()) {
-      console.log('Comentario vacío, no se puede publicar.');
-      Swal.fire({
-        icon: 'error',
-        title: 'Comentario vacío',
-        text: 'Escribe algo antes de publicar. El campo no puede estar vacío.',
-        footer: '<strong>Solución:</strong><br>- Asegúrate de que el campo de comentario no esté vacío.',
-      });
-      return;
-    }
-
-    if (!isAuthenticated) {
-      console.log('Usuario no autenticado.');
-      Swal.fire({
-        icon: 'error',
-        title: 'No autenticado',
-        text: 'Debes iniciar sesión para publicar un comentario. Por favor, inicia sesión primero.',
-        footer: '<strong>Solución:</strong><br>- Haz clic en el botón de inicio de sesión y accede a tu cuenta.',
-      });
-      return;
-    }
-
+    if (!newComment.trim() || !isAuthenticated) return;
     try {
-      console.log('Enviando el comentario a la API...');
-      const response = await axios.post(`${BASE_URL}/comments`, {  // Cambié la URL a '/comments'
-        username: user.username, // Nombre del usuario
+      const response = await axios.post(`${BASE_URL}/comments`, {
+        username: user.username,
         content: newComment,
       });
-
       if (response.status === 201) {
-        console.log('Comentario publicado con éxito:', response.data);
-        // Añadir el nuevo comentario a la lista de comentarios
-        setComments((prevComments) => [...prevComments, response.data]);
-
-        // Limpiar el campo de texto
+        setComments([...comments, response.data]);
         setNewComment('');
-
-        Swal.fire({
-          icon: 'success',
-          title: 'Comentario publicado',
-          text: 'Tu comentario se ha publicado exitosamente.',
-        });
-      } else {
-        console.error(`Error al publicar el comentario: Status ${response.status}`);
-        throw new Error(`Error al publicar el comentario: Status ${response.status}`);
+        Swal.fire('Éxito', 'Comentario publicado con éxito', 'success');
       }
     } catch (error) {
       console.error('Error al publicar el comentario:', error);
-      Swal.fire({
-        icon: 'error',
-        title: 'Error al publicar comentario',
-        text: `Hubo un problema al publicar tu comentario. ${error.response ? `Código de error: ${error.response.status} - ${error.response.statusText}` : error.message}`,
-        footer: '<strong>Posibles soluciones:</strong><br>- Verifica que el contenido del comentario sea válido.<br>- Intenta nuevamente.<br>- Si el error persiste, contacta al soporte.',
+      Swal.fire('Error', 'No se pudo publicar el comentario', 'error');
+    }
+  };
+
+  const handleDelete = async (commentId) => {
+    if (!isAuthenticated) return;
+    
+    console.log('Intentando eliminar:', {
+      url: `${BASE_URL}/comments/${commentId}`,
+      userId: user.id
+    });
+  
+    try {
+      // Cambiamos la forma de hacer la petición DELETE
+      const response = await axios.delete(`${BASE_URL}/comments/${commentId}`, {
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        data: { user_id: user.id } // axios.delete espera los datos en el campo 'data'
       });
+      
+      if (response.status === 200) {
+        setComments(comments.filter(comment => comment.id !== commentId));
+        Swal.fire('Éxito', 'Comentario eliminado con éxito', 'success');
+      }
+    } catch (error) {
+      console.error('Error al eliminar el comentario:', error);
+      console.log('User ID:', user.id);
+      console.log('Comment ID:', commentId);
+      Swal.fire('Error', 'No se pudo eliminar el comentario', 'error');
+    }
+  };
+
+  const handleEdit = async (commentId) => {
+    if (!isAuthenticated || !editingContent.trim()) return;
+
+    try {
+      const response = await axios.put(`${BASE_URL}/comments/${commentId}`, {
+        user_id: user.id,
+        content: editingContent
+      });
+
+      if (response.status === 200) {
+        setComments(comments.map(comment => 
+          comment.id === commentId ? { ...comment, content: editingContent } : comment
+        ));
+        setEditingComment(null);
+        setEditingContent('');
+        Swal.fire('Éxito', 'Comentario modificado con éxito', 'success');
+      }
+    } catch (error) {
+      console.error('Error al modificar el comentario:', error);
+      Swal.fire('Error', 'No se pudo modificar el comentario', 'error');
+    }
+  };
+
+  const handleReply = async (parentId) => {
+    if (!replyContent.trim() || !isAuthenticated) return;
+    
+    try {
+      const response = await axios.post(`${BASE_URL}/comments`, {
+        username: user.username,
+        content: replyContent,
+        parent_id: parentId,
+      });
+      
+      if (response.status === 201) {
+        // Actualizar comentarios incluyendo la nueva respuesta
+        const updatedComments = [...comments];
+        const parentCommentIndex = updatedComments.findIndex(c => c.id === parentId);
+        if (parentCommentIndex !== -1) {
+          if (!updatedComments[parentCommentIndex].replies) {
+            updatedComments[parentCommentIndex].replies = [];
+          }
+          updatedComments[parentCommentIndex].replies.push(response.data);
+        }
+        setComments(updatedComments);
+        setReplyingTo(null);
+        setReplyContent('');
+        Swal.fire('Éxito', 'Respuesta publicada con éxito', 'success');
+      }
+    } catch (error) {
+      console.error('Error al responder el comentario:', error);
+      Swal.fire('Error', 'No se pudo publicar la respuesta', 'error');
     }
   };
 
   return (
     <section className="foro">
       <h3>Foro de Discusión</h3>
-      {isAuthenticated ? (
-        <>
+      {isAuthenticated && (
+        <div className="nuevo-comentario">
           <textarea
             className="foro-textarea"
             placeholder="Escribe un comentario..."
-            rows="4"
             value={newComment}
-            onChange={(e) => {
-              console.log('Cambio en el comentario:', e.target.value);
-              setNewComment(e.target.value);
-            }}
-          ></textarea>
+            onChange={(e) => setNewComment(e.target.value)}
+          />
           <button className="btn-publicar" onClick={handlePostComment}>
             Publicar
           </button>
-        </>
-      ) : (
-        <p>Debes iniciar sesión para comentar.</p>
+        </div>
       )}
-
       <ul className="comentarios">
         {comments.length > 0 ? (
           comments.map((comment) => (
             <li key={comment.id} className="comentario-item">
               <div className="comentario-box">
-                <p>
+                <div className="comentario-header">
                   <strong>{comment.User?.username || 'Usuario Anónimo'}</strong>
                   <span className="comment-date">
                     {new Date(comment.created_at).toLocaleString()}
                   </span>
-                </p>
-                <p className="comment-content">{comment.content}</p>
+                </div>
+                
+                {editingComment === comment.id ? (
+                  <div className="edit-container">
+                    <textarea
+                      value={editingContent}
+                      onChange={(e) => setEditingContent(e.target.value)}
+                      className="edit-textarea"
+                    />
+                    <div className="edit-actions">
+                      <button onClick={() => handleEdit(comment.id)}>
+                        Guardar
+                      </button>
+                      <button onClick={() => {
+                        setEditingComment(null);
+                        setEditingContent('');
+                      }}>
+                        Cancelar
+                      </button>
+                    </div>
+                  </div>
+                ) : (
+                  <p className="comment-content">{comment.content}</p>
+                )}
+
+                {isAuthenticated && (
+                  <div className="comment-actions">
+                    <button onClick={() => {
+                      setReplyingTo(comment.id);
+                      setReplyContent(`@${comment.User?.username || 'Usuario Anónimo'} `);
+                    }}>
+                      Responder
+                    </button>
+                    
+                    {user && comment.User && user.username === comment.User.username && (
+                      <>
+                        <button onClick={() => {
+                          setEditingComment(comment.id);
+                          setEditingContent(comment.content);
+                        }}>
+                          Modificar
+                        </button>
+                        <button 
+                          className="btn-eliminar" 
+                          onClick={() => handleDelete(comment.id)}
+                        >
+                          Eliminar
+                        </button>
+                      </>
+                    )}
+                  </div>
+                )}
+
+                {replyingTo === comment.id && (
+                  <div className="reply-box">
+                    <textarea
+                      value={replyContent}
+                      onChange={(e) => setReplyContent(e.target.value)}
+                      placeholder="Escribe tu respuesta..."
+                    />
+                    <div className="reply-actions">
+                      <button onClick={() => handleReply(comment.id)}>
+                        Enviar Respuesta
+                      </button>
+                      <button onClick={() => {
+                        setReplyingTo(null);
+                        setReplyContent('');
+                      }}>
+                        Cancelar
+                      </button>
+                    </div>
+                  </div>
+                )}
+
+                {/* Mostrar respuestas */}
+                {comment.replies && comment.replies.length > 0 && (
+                  <ul className="replies-list">
+                    {comment.replies.map((reply) => (
+                      <li key={reply.id} className="reply-item">
+                        <strong>{reply.User?.username || 'Usuario Anónimo'}</strong>
+                        <span className="reply-date">
+                          {new Date(reply.created_at).toLocaleString()}
+                        </span>
+                        <p>{reply.content}</p>
+                      </li>
+                    ))}
+                  </ul>
+                )}
               </div>
             </li>
           ))
         ) : (
-          <p>No hay comentarios disponibles. Sé el primero en comentar.</p>
+          <p className="no-comments">No hay comentarios disponibles. ¡Sé el primero en comentar!</p>
         )}
       </ul>
     </section>
