@@ -12,6 +12,7 @@ const auth = (req, res, next) => {
     req.userId = decoded.userId;
     next();
   } catch (error) {
+    console.error("Error en autenticación:", error);
     res.status(401).json({ message: 'Por favor autentícate' });
   }
 };

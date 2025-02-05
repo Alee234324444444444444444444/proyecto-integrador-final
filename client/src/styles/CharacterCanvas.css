@@ -47,3 +47,36 @@ canvas {
   background-color: #a66414;
   color: white;
 }
+
+/* Sidebar de recompensas */
+.character-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
+}
+
+.sidebar {
+  background-color: black;
+  padding: 20px;
+  color: white;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  border-radius: 10px;
+  max-width: 200px;
+}
+
+.sidebar button {
+  background-color: #4CAF50;
+  color: white;
+  border: none;
+  padding: 10px;
+  cursor: pointer;
+  border-radius: 5px;
+  font-size: 16px;
+}
+
+.sidebar button:hover {
+  background-color: #45a049;
+}
