@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import Swal from 'sweetalert2';
 import axios from 'axios';
 import { useAuth } from '../context/AuthContext';
+import { Reply, Edit, Trash2, Send, X, ChevronDown, ChevronRight } from 'lucide-react';
+import ReplyComponent from './ReplyComponent';
 import '../styles/Forum.css';
 
 const BASE_URL = 'http://localhost:3000';
@@ -12,22 +14,38 @@ function Forum() {
   const [newComment, setNewComment] = useState('');
   const [editingComment, setEditingComment] = useState(null);
   const [editingContent, setEditingContent] = useState('');
+  const [expandedComments, setExpandedComments] = useState(new Set());
+  const [expandedReplies, setExpandedReplies] = useState(new Set());
   const [replyingTo, setReplyingTo] = useState(null);
   const [replyContent, setReplyContent] = useState('');
 
   useEffect(() => {
-    const fetchComments = async () => {
-      try {
-        const response = await axios.get(`${BASE_URL}/comments`);
-        if (response.status === 200) {
-          setComments(response.data);
-        }
-      } catch (error) {
-        console.error('Error al cargar comentarios:', error);
-      }
-    };
     fetchComments();
   }, []);
+
+  const fetchComments = async () => {
+    try {
+      const response = await axios.get(`${BASE_URL}/comments`);
+      if (response.status === 200) {
+        setComments(response.data);
+      }
+    } catch (error) {
+      console.error('Error al cargar comentarios:', error);
+    }
+  };
+
+  const toggleExpanded = (id, type = 'comment') => {
+    const setFunction = type === 'comment' ? setExpandedComments : setExpandedReplies;
+    setFunction(prev => {
+      const newSet = new Set(prev);
+      if (newSet.has(id)) {
+        newSet.delete(id);
+      } else {
+        newSet.add(id);
+      }
+      return newSet;
+    });
+  };
 
   const handlePostComment = async () => {
     if (!newComment.trim() || !isAuthenticated) return;
@@ -37,96 +55,91 @@ function Forum() {
         content: newComment,
       });
       if (response.status === 201) {
-        setComments([...comments, response.data]);
+        setComments([response.data, ...comments]);
         setNewComment('');
         Swal.fire('Éxito', 'Comentario publicado con éxito', 'success');
       }
     } catch (error) {
-      console.error('Error al publicar el comentario:', error);
+      console.error('Error:', error);
       Swal.fire('Error', 'No se pudo publicar el comentario', 'error');
     }
   };
 
-  const handleDelete = async (commentId) => {
-    if (!isAuthenticated) return;
-    
-    console.log('Intentando eliminar:', {
-      url: `${BASE_URL}/comments/${commentId}`,
-      userId: user.id
-    });
-  
-    try {
-      // Cambiamos la forma de hacer la petición DELETE
-      const response = await axios.delete(`${BASE_URL}/comments/${commentId}`, {
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        data: { user_id: user.id } // axios.delete espera los datos en el campo 'data'
-      });
-      
-      if (response.status === 200) {
-        setComments(comments.filter(comment => comment.id !== commentId));
-        Swal.fire('Éxito', 'Comentario eliminado con éxito', 'success');
-      }
-    } catch (error) {
-      console.error('Error al eliminar el comentario:', error);
-      console.log('User ID:', user.id);
-      console.log('Comment ID:', commentId);
-      Swal.fire('Error', 'No se pudo eliminar el comentario', 'error');
-    }
-  };
-
-  const handleEdit = async (commentId) => {
-    if (!isAuthenticated || !editingContent.trim()) return;
-
-    try {
-      const response = await axios.put(`${BASE_URL}/comments/${commentId}`, {
-        user_id: user.id,
-        content: editingContent
-      });
-
-      if (response.status === 200) {
-        setComments(comments.map(comment => 
-          comment.id === commentId ? { ...comment, content: editingContent } : comment
-        ));
-        setEditingComment(null);
-        setEditingContent('');
-        Swal.fire('Éxito', 'Comentario modificado con éxito', 'success');
-      }
-    } catch (error) {
-      console.error('Error al modificar el comentario:', error);
-      Swal.fire('Error', 'No se pudo modificar el comentario', 'error');
-    }
-  };
-
-  const handleReply = async (parentId) => {
-    if (!replyContent.trim() || !isAuthenticated) return;
+  const handleReply = async (parentId, content) => {
+    if (!content.trim() || !isAuthenticated) return;
     
     try {
       const response = await axios.post(`${BASE_URL}/comments`, {
         username: user.username,
-        content: replyContent,
+        content: content,
         parent_id: parentId,
       });
       
       if (response.status === 201) {
-        // Actualizar comentarios incluyendo la nueva respuesta
-        const updatedComments = [...comments];
-        const parentCommentIndex = updatedComments.findIndex(c => c.id === parentId);
-        if (parentCommentIndex !== -1) {
-          if (!updatedComments[parentCommentIndex].replies) {
-            updatedComments[parentCommentIndex].replies = [];
-          }
-          updatedComments[parentCommentIndex].replies.push(response.data);
-        }
-        setComments(updatedComments);
-        setReplyingTo(null);
-        setReplyContent('');
+        const newReply = response.data;
+        
+        // Actualizar el estado local
+        setComments(prevComments => {
+          const updateReplies = (comments) => {
+            return comments.map(comment => {
+              if (comment.id === parentId) {
+                return {
+                  ...comment,
+                  replies: [...(comment.replies || []), newReply]
+                };
+              }
+              if (comment.replies) {
+                return {
+                  ...comment,
+                  replies: updateReplies(comment.replies)
+                };
+              }
+              return comment;
+            });
+          };
+          
+          return updateReplies(prevComments);
+        });
+  
+        // Mostrar mensaje de éxito
         Swal.fire('Éxito', 'Respuesta publicada con éxito', 'success');
       }
     } catch (error) {
-      console.error('Error al responder el comentario:', error);
+      console.error('Error al responder:', error);
       Swal.fire('Error', 'No se pudo publicar la respuesta', 'error');
+    }
+  };
+
+  const handleEdit = async (commentId, content) => {
+    try {
+      const response = await axios.put(`${BASE_URL}/comments/${commentId}`, {
+        user_id: user.id,
+        content
+      });
+
+      if (response.status === 200) {
+        await fetchComments(); // Recargar comentarios
+        Swal.fire('Éxito', 'Comentario modificado con éxito', 'success');
+      }
+    } catch (error) {
+      console.error('Error:', error);
+      Swal.fire('Error', 'No se pudo modificar el comentario', 'error');
+    }
+  };
+
+  const handleDelete = async (commentId) => {
+    try {
+      const response = await axios.delete(`${BASE_URL}/comments/${commentId}`, {
+        data: { user_id: user.id }
+      });
+      
+      if (response.status === 200) {
+        await fetchComments(); // Recargar comentarios
+        Swal.fire('Éxito', 'Comentario eliminado con éxito', 'success');
+      }
+    } catch (error) {
+      console.error('Error:', error);
+      Swal.fire('Error', 'No se pudo eliminar el comentario', 'error');
     }
   };
 
@@ -152,62 +165,43 @@ function Forum() {
             <li key={comment.id} className="comentario-item">
               <div className="comentario-box">
                 <div className="comentario-header">
-                  <strong>{comment.User?.username || 'Usuario Anónimo'}</strong>
+                  <strong>{comment.User?.username}</strong>
                   <span className="comment-date">
                     {new Date(comment.created_at).toLocaleString()}
                   </span>
-                </div>
-                
-                {editingComment === comment.id ? (
-                  <div className="edit-container">
-                    <textarea
-                      value={editingContent}
-                      onChange={(e) => setEditingContent(e.target.value)}
-                      className="edit-textarea"
-                    />
-                    <div className="edit-actions">
-                      <button onClick={() => handleEdit(comment.id)}>
-                        Guardar
+                  {isAuthenticated && (
+                    <div className="comment-actions">
+                      <button 
+                        className="icon-button"
+                        title="Responder"
+                        onClick={() => setReplyingTo(comment.id)}
+                      >
+                        <Reply size={18} />
                       </button>
-                      <button onClick={() => {
-                        setEditingComment(null);
-                        setEditingContent('');
-                      }}>
-                        Cancelar
-                      </button>
+                      {user && comment.User && user.username === comment.User.username && (
+                        <>
+                          <button 
+                            className="icon-button"
+                            title="Modificar"
+                            onClick={() => {
+                              setEditingComment(comment.id);
+                              setEditingContent(comment.content);
+                            }}
+                          >
+                            <Edit size={18} />
+                          </button>
+                          <button 
+                            className="icon-button delete"
+                            title="Eliminar"
+                            onClick={() => handleDelete(comment.id)}
+                          >
+                            <Trash2 size={18} />
+                          </button>
+                        </>
+                      )}
                     </div>
-                  </div>
-                ) : (
-                  <p className="comment-content">{comment.content}</p>
-                )}
-
-                {isAuthenticated && (
-                  <div className="comment-actions">
-                    <button onClick={() => {
-                      setReplyingTo(comment.id);
-                      setReplyContent(`@${comment.User?.username || 'Usuario Anónimo'} `);
-                    }}>
-                      Responder
-                    </button>
-                    
-                    {user && comment.User && user.username === comment.User.username && (
-                      <>
-                        <button onClick={() => {
-                          setEditingComment(comment.id);
-                          setEditingContent(comment.content);
-                        }}>
-                          Modificar
-                        </button>
-                        <button 
-                          className="btn-eliminar" 
-                          onClick={() => handleDelete(comment.id)}
-                        >
-                          Eliminar
-                        </button>
-                      </>
-                    )}
-                  </div>
-                )}
+                  )}
+                </div>
 
                 {replyingTo === comment.id && (
                   <div className="reply-box">
@@ -217,32 +211,88 @@ function Forum() {
                       placeholder="Escribe tu respuesta..."
                     />
                     <div className="reply-actions">
-                      <button onClick={() => handleReply(comment.id)}>
-                        Enviar Respuesta
+                      <button 
+                        className="icon-button"
+                        title="Enviar Respuesta"
+                        onClick={() => {
+                          handleReply(comment.id, replyContent);
+                          setReplyingTo(null);
+                          setReplyContent('');
+                        }}
+                      >
+                        <Send size={18} />
                       </button>
-                      <button onClick={() => {
-                        setReplyingTo(null);
-                        setReplyContent('');
-                      }}>
-                        Cancelar
+                      <button 
+                        className="icon-button"
+                        title="Cancelar"
+                        onClick={() => {
+                          setReplyingTo(null);
+                          setReplyContent('');
+                        }}
+                      >
+                        <X size={18} />
                       </button>
                     </div>
                   </div>
                 )}
+                                
+                {editingComment === comment.id ? (
+                  <div className="edit-container">
+                    <textarea
+                      value={editingContent}
+                      onChange={(e) => setEditingContent(e.target.value)}
+                      className="edit-textarea"
+                    />
+                    <div className="edit-actions">
+                      <button 
+                        className="icon-button"
+                        onClick={() => handleEdit(comment.id, editingContent)}
+                      >
+                        <Send size={18} />
+                      </button>
+                      <button 
+                        className="icon-button"
+                        onClick={() => {
+                          setEditingComment(null);
+                          setEditingContent('');
+                        }}
+                      >
+                        <X size={18} />
+                      </button>
+                    </div>
+                  </div>
+                ) : (
+                  <p className="comment-content">{comment.content}</p>
+                )}
 
-                {/* Mostrar respuestas */}
                 {comment.replies && comment.replies.length > 0 && (
-                  <ul className="replies-list">
-                    {comment.replies.map((reply) => (
-                      <li key={reply.id} className="reply-item">
-                        <strong>{reply.User?.username || 'Usuario Anónimo'}</strong>
-                        <span className="reply-date">
-                          {new Date(reply.created_at).toLocaleString()}
-                        </span>
-                        <p>{reply.content}</p>
-                      </li>
-                    ))}
-                  </ul>
+                  <>
+                    <button 
+                      className="expand-button"
+                      onClick={() => toggleExpanded(comment.id)}
+                    >
+                      {expandedComments.has(comment.id) ? 
+                        <ChevronDown size={18} /> : 
+                        <ChevronRight size={18} />
+                      }
+                      {comment.replies.length} respuestas
+                    </button>
+                    {expandedComments.has(comment.id) && (
+                      <div className="replies-container">
+                        {comment.replies.map(reply => (
+                          <ReplyComponent
+                            key={reply.id}
+                            reply={reply}
+                            onReply={handleReply}
+                            onEdit={handleEdit}
+                            onDelete={handleDelete}
+                            expandedReplies={expandedReplies}
+                            toggleExpanded={toggleExpanded}
+                          />
+                        ))}
+                      </div>
+                    )}
+                  </>
                 )}
               </div>
             </li>

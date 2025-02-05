@@ -1,6 +1,6 @@
 const express = require('express');
-const { Comment, User } = require('../models');
 const router = express.Router();
+const { Comment, User } = require('../models');
 
 // Obtener comentarios con respuestas
 router.get('/', async (req, res) => {
@@ -12,7 +12,21 @@ router.get('/', async (req, res) => {
         {
           model: Comment,
           as: 'replies',
-          include: [{ model: User, attributes: ['username'] }]
+          include: [
+            { model: User, attributes: ['username'] },
+            {
+              model: Comment,
+              as: 'replies',
+              include: [
+                { model: User, attributes: ['username'] },
+                {
+                  model: Comment,
+                  as: 'replies',
+                  include: [{ model: User, attributes: ['username'] }]
+                }
+              ]
+            }
+          ]
         }
       ],
       order: [['created_at', 'DESC']]
@@ -53,8 +67,6 @@ router.post('/', async (req, res) => {
   }
 });
 
-
-const { Comment, User } = require('../models');
 
 // Log para verificar que la ruta está registrada
 console.log('Registrando ruta DELETE /comments/:id');
