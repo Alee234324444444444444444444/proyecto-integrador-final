@@ -8,6 +8,7 @@ import ChallengesSection from './components/ChallengesSection';
 import Forum from './components/Forum';
 import Login from './components/Login';
 import Register from './components/Register';
+import ReportTable from './components/ReportTable.jsx';
 import './index.css';
 
 function App() {
@@ -22,12 +23,15 @@ function App() {
               <CharacterCanvas />
               <ChallengesSection />
               <Forum />
+              <ReportTable/>
             </>
           } />
           <Route path="/login" element={<Login />} />
           <Route path="/comments" element={<Forum />} />
           <Route path="/challenges" element={<ChallengesSection />} />
           <Route path="/register" element={<Register />} />
+          <Route path="/reportes" element={<ReportTable/>} />
+
         </Routes>
       </Router>
     </AuthProvider>

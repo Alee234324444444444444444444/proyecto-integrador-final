@@ -3,6 +3,7 @@ const { sequelize } = require('./models');
 require('dotenv').config();
 const cors = require('cors');
 const commentsRoutes = require('./routes/comments');
+const reportsRoutes = require('./routes/reports'); // Importa las rutas de reportes
 const app = express();
 
 // 1. Middlewares básicos
@@ -25,6 +26,7 @@ app.use((req, res, next) => {
 });
 
 // 3. Rutas
+app.use('/reportes', reportsRoutes); 
 app.use('/comments', commentsRoutes);
 app.use('/api/auth', require('./routes/auth'));
 
