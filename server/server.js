@@ -26,8 +26,8 @@ app.use((req, res, next) => {
 });
 
 // 3. Rutas
-app.use('/comments', commentsRoutes);
 app.use('/api/auth', require('./routes/auth'));
+app.use('/comments', commentsRoutes);
 app.use('/api/challenges', challengeRoutes);
 
 // 4. Manejo de errores 
