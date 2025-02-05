@@ -25,7 +25,7 @@ function App() {
             </>
           } />
           <Route path="/login" element={<Login />} />
-          <Route path="/publicaciones" element={<Forum />} />
+          <Route path="/comments" element={<Forum />} />
           <Route path="/challenges" element={<ChallengesSection />} />
           <Route path="/register" element={<Register />} />
         </Routes>

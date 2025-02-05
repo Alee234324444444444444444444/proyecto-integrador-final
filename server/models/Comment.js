@@ -1,6 +1,5 @@
 const { DataTypes } = require('sequelize');
 const sequelize = require('../config/database');
-const User = require('./User');
 
 const Comment = sequelize.define('Comment', {
   id: {
@@ -15,13 +14,26 @@ const Comment = sequelize.define('Comment', {
   created_at: {
     type: DataTypes.DATE,
     defaultValue: DataTypes.NOW
+  },
+  user_id: {
+    type: DataTypes.INTEGER,
+    allowNull: false,
+    references: {
+      model: 'users', // Cambiado de User a 'users'
+      key: 'id'
+    }
+  },
+  parent_id: {
+    type: DataTypes.INTEGER,
+    allowNull: true,
+    references: {
+      model: 'comment',
+      key: 'id'
+    }
   }
 }, {
   tableName: 'comment',
   timestamps: false
 });
-
-// Relación con User
-Comment.belongsTo(User, { foreignKey: 'user_id', onDelete: 'CASCADE' });
 
 module.exports = Comment;
