@@ -8,8 +8,16 @@ const ReportTable = () => {
 
   useEffect(() => {
     axios.get(`${BASE_URL}/reportes`)
-      .then(response => setReports(response.data))
-      .catch(error => console.error('Error:', error));
+      .then(response => {
+        console.log('Datos recibidos:', response.data); // Verifica los datos en consola
+        setReports(response.data);
+      })
+      .catch(error => {
+        console.error('Error al obtener los reportes:', error);
+        if (error.response) {
+          console.error('Detalles del error:', error.response.data);
+        }
+      });
   }, []);
 
   return (
@@ -24,13 +32,19 @@ const ReportTable = () => {
           </tr>
         </thead>
         <tbody>
-          {reports.map(report => (
-            <tr key={report.id}>
-              <td>{report.id}</td>
-              <td>{report.name}</td>
-              <td>{report.total_comments}</td>
+          {reports.length > 0 ? (
+            reports.map(report => (
+              <tr key={report.id}>
+                <td>{report.id}</td>
+                <td>{report.name}</td>
+                <td>{report.total_comments}</td>
+              </tr>
+            ))
+          ) : (
+            <tr>
+              <td colSpan="3">No hay datos disponibles</td>
             </tr>
-          ))}
+          )}
         </tbody>
       </table>
     </div>

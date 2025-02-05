@@ -23,7 +23,7 @@ function App() {
               <CharacterCanvas />
               <ChallengesSection />
               <Forum />
-              <ReportTable/>
+              
             </>
           } />
           <Route path="/login" element={<Login />} />
