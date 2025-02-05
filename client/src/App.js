@@ -8,6 +8,7 @@ import ChallengesSection from './components/ChallengesSection';
 import Forum from './components/Forum';
 import Login from './components/Login';
 import Register from './components/Register';
+import AdminChallenges from './components/AdminChallenges';
 import './index.css';
 
 function App() {
@@ -27,6 +28,7 @@ function App() {
           <Route path="/login" element={<Login />} />
           <Route path="/comments" element={<Forum />} />
           <Route path="/challenges" element={<ChallengesSection />} />
+          <Route path="/admin/challenges" element={<AdminChallenges />} />
           <Route path="/register" element={<Register />} />
         </Routes>
       </Router>

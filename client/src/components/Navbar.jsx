@@ -23,6 +23,9 @@ function Navbar() {
       <ul className="navbar-links">
         <li><Link to="/">Inicio</Link></li>
         <li><Link to="/publicaciones">Publicaciones</Link></li>
+        {isAuthenticated && user?.isSuperuser && (
+        <li><Link to="/admin/challenges">Admin Desafíos</Link></li>
+        )}
         <li><Link to="/challenges">Desafíos</Link></li>
       </ul>
       <div className="navbar-actions">
