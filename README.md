@@ -7,3 +7,6 @@
 3. Rellena las variables de entorno con tus credenciales de Firebase
 4. Ejecuta `npm install`
 5. Ejecuta `npm start`
+
+## Para iconos del foro
+`npm install lucide-react`
