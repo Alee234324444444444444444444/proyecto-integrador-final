@@ -8,7 +8,7 @@ const sequelize = require('../config/database');
 router.get('/', async (req, res) => {
   try {
     // Ejecuta la consulta SQL directamente a la vista
-    const [results, metadata] = await sequelize.query('SELECT * FROM user_comments_report');
+    const [results, metadata] = await sequelize.query('SELECT * FROM perfil_view');
 
     // Envía los resultados en formato JSON
     res.json(results);

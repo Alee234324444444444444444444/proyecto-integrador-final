@@ -8,7 +8,7 @@ import ChallengesSection from './components/ChallengesSection';
 import Forum from './components/Forum';
 import Login from './components/Login';
 import Register from './components/Register';
-import ReportTable from './components/ReportTable.jsx';
+import RankingTable from './components/RankingTable.jsx';
 import './index.css';
 
 function App() {
@@ -30,7 +30,7 @@ function App() {
           <Route path="/comments" element={<Forum />} />
           <Route path="/challenges" element={<ChallengesSection />} />
           <Route path="/register" element={<Register />} />
-          <Route path="/reportes" element={<ReportTable/>} />
+          <Route path="/ranking" element={<RankingTable/>} />
 
         </Routes>
       </Router>

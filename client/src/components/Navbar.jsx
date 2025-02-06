@@ -24,6 +24,11 @@ function Navbar() {
         <li><Link to="/">Inicio</Link></li>
         <li><Link to="/publicaciones">Publicaciones</Link></li>
         <li><Link to="/challenges">Desafíos</Link></li>
+        {isAuthenticated && (
+
+          <li><Link to="/ranking">Comentarios Ranking</Link></li>
+          )}
+
       </ul>
       <div className="navbar-actions">
         {isAuthenticated ? (
