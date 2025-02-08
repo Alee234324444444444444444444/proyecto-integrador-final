@@ -17,16 +17,27 @@ const Post = sequelize.define('Post', {
     type: DataTypes.STRING(75),
     allowNull: false
   },
+  status: {
+    type: DataTypes.ENUM('pending', 'approved', 'rejected'),
+    defaultValue: 'pending'
+  },
   created_at: {
     type: DataTypes.DATE,
     defaultValue: DataTypes.NOW
+  },
+  approved_by: {
+    type: DataTypes.INTEGER,
+    allowNull: true,
+    references: {
+      model: 'superuser',
+      key: 'id'
+    }
   }
 }, {
   tableName: 'post',
   timestamps: false
 });
 
-// Relación con User y Challenge
 Post.belongsTo(User, { foreignKey: 'user_id', onDelete: 'CASCADE' });
 Post.belongsTo(Challenge, { foreignKey: 'challenge_id', onDelete: 'CASCADE' });
 

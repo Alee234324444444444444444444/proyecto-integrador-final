@@ -24,7 +24,6 @@ function App() {
               <Header />
               <CharacterCanvas />
               <ChallengesSection />
-              <Forum />
             </>
           } />
           <Route path="/login" element={<Login />} />
@@ -33,7 +32,11 @@ function App() {
           <Route path="/admin/challenges" element={<AdminChallenges />} />
           <Route path="/register" element={<Register />} />
           <Route path="/reports" element={<ReportTable/>} />
-          <Route path="/publicaciones" element={<Posts />} />
+          <Route path="/publicaciones" element={
+            <>
+              <Posts />
+              <Forum />
+            </>} />
         </Routes>
       </Router>
     </AuthProvider>

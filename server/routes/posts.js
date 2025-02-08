@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const multer = require('multer');
 const path = require('path');
-const { Post } = require('../models');
+const { Post, Superuser } = require('../models');
 const auth = require('../middleware/auth');
 
 // Configurar multer para el almacenamiento de imágenes
@@ -69,22 +69,32 @@ router.get('/', async (req, res) => {
 
 // Actualizar el estado de una publicación
 router.patch('/:id/status', auth, async (req, res) => {
-    try {
-      const { id } = req.params;
-      const { status } = req.body;
-  
-      const post = await Post.findByPk(id);
-      if (!post) {
-        return res.status(404).json({ message: 'Publicación no encontrada' });
-      }
-  
-      await post.update({ status });
-      res.json(post);
-    } catch (error) {
-      console.error('Error al actualizar el estado:', error);
-      res.status(500).json({ message: 'Error al actualizar el estado' });
+  try {
+    const { id } = req.params;
+    const { status, approved_by } = req.body;
+
+    // Verificar si el usuario es superuser
+    const superuser = await Superuser.findByPk(req.userId);
+    if (!superuser) {
+      return res.status(403).json({ message: 'No autorizado' });
     }
-  });
+
+    const post = await Post.findByPk(id);
+    if (!post) {
+      return res.status(404).json({ message: 'Post no encontrado' });
+    }
+
+    await post.update({ 
+      status,
+      approved_by: approved_by
+    });
+
+    res.json(post);
+  } catch (error) {
+    console.error('Error al actualizar estado:', error);
+    res.status(500).json({ message: 'Error al actualizar el estado' });
+  }
+});
   
 
 module.exports = router;
