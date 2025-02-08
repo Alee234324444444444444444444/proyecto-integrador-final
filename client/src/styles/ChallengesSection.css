@@ -2,12 +2,13 @@
 .challenges-container {
   margin: 20px auto;
   padding: 15px;
-  background-color: #2d4459;
+  background-color: transparent;
   color: #f0f4f8;
   border-radius: 15px;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
   text-align: center;
   width: 90%;
+  border: 2px solid;
 }
 
 .challenges-container ul {
@@ -17,7 +18,7 @@
 }
 
 .challenges-container li {
-  background-color: #426a8c;
+  background-color: transparent;
   margin: 10px 0;
   padding: 10px;
   border-radius: 10px;
@@ -29,8 +30,8 @@
 }
 
 .challenges-container button {
-  background-color: #a66414;
-  color: white;
+  background-color: transparent;
+  color: #304d73;
   font-weight: 600;
   padding: 8px 12px;
   border-radius: 10px;

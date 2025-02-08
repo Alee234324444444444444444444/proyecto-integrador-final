@@ -9,6 +9,7 @@ import Forum from './components/Forum';
 import Login from './components/Login';
 import Register from './components/Register';
 import RankingTable from './components/RankingTable.jsx';
+import '../src/styles/globals.css'
 import './index.css';
 
 function App() {

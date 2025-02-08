@@ -3,7 +3,7 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background-color: #151d26;
+  background-color: transparent;
   padding: 10px 20px;
   position: sticky;
   top: 0;
@@ -50,20 +50,22 @@
 }
 
 .navbar-actions .login-btn {
-  background-color: #81231e;
-  color: white;
+  background-color: transparent; /* Fondo transparente */
+  color: white; /* Color del texto */
   font-size: 1.2em;
   font-weight: bold;
   padding: 10px 20px;
-  border-radius: 10px;
+  border-radius: 10px; /* Bordes redondeados */
   cursor: pointer;
-  transition: background-color 0.3s;
-  border: none;
+  transition: border-color 0.3s, color 0.3s; /* Transición suave para bordes y color */
+  border: 2px solid white; /* Borde blanco (o el color que prefieras) */
 }
 
 .navbar-actions .login-btn:hover {
-  background-color: #a66414;
+  color: #81231e; /* Cambia el color del texto al pasar el cursor */
+  border-color: #81231e; /* Cambia el color del borde al pasar el cursor */
 }
+
 
 .welcome-message {
   color: #f0f4f8; 
