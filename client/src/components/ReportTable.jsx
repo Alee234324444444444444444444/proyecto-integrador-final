@@ -1,19 +1,21 @@
 import { useEffect, useState } from 'react';
 import axios from 'axios';
+import '../styles/ReportTable.css';  
 
-const BASE_URL = 'http://localhost:3000';
+const BASE = 'http://localhost:3000';  // Cambia esto según tu URL base
 
-const ReportTable = () => {
-  const [reports, setReports] = useState([]);
+const Reports = () => {
+  const [userData, setUserData] = useState([]);
 
   useEffect(() => {
-    axios.get(`${BASE_URL}/reports`)
+    // Hacer una solicitud GET para obtener los datos del perfil
+    axios.get(`${BASE}/reports`)
       .then(response => {
-        console.log('Datos recibidos:', response.data);
-        setReports(response.data);
+        console.log('Datos del ranking:', response.data); // Verifica los datos recibidos
+        setUserData(response.data);
       })
       .catch(error => {
-        console.error('Error al obtener los reportes:', error);
+        console.error('Error al obtener los datos del ranking:', error);
         if (error.response) {
           console.error('Detalles del error:', error.response.data);
         }
@@ -21,28 +23,38 @@ const ReportTable = () => {
   }, []);
 
   return (
-    <div>
-      <h2>Reporte de Comentarios</h2>
-      <table border="1">
+    <div className='ranking-container'>
+      <h2>Ranking de Comentarios</h2>
+      <table className="table table-bordered">
         <thead>
           <tr>
-            <th>ID Usuario</th>
-            <th>Nombre</th>
-            <th>Total Comentarios</th>
+            <th><strong>Usuario</strong></th>
+            <th><strong>Nombre</strong></th>
+            <th><strong>Username</strong></th>
+            <th><strong>Email</strong></th>
+            <th><strong>Comentarios Totales</strong></th>
+            <th><strong>Respuestas Totales</strong></th>
+            <th><strong>Últimos Comentarios</strong></th>
+            
           </tr>
         </thead>
         <tbody>
-          {reports.length > 0 ? (
-            reports.map(report => (
-              <tr key={report.id}>
-                <td>{report.id}</td>
-                <td>{report.name}</td>
-                <td>{report.total_comments}</td>
+          {userData.length > 0 ? (
+            userData.map(user => (
+              <tr key={user.id}>
+                <td>{user.id}</td>
+                <td>{user.name}</td>
+                <td>{user.username}</td>
+                <td>{user.email}</td>
+                <td>{user.total_comments}</td>
+                <td>{user.total_responses}</td>
+                <td>{user.last_three_comments}</td>
+                
               </tr>
             ))
           ) : (
             <tr>
-              <td colSpan="3">No hay datos disponibles</td>
+              <td colSpan="8">No hay datos disponibles</td>
             </tr>
           )}
         </tbody>
@@ -51,4 +63,4 @@ const ReportTable = () => {
   );
 };
 
-export default ReportTable;
+export default Reports;
