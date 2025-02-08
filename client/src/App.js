@@ -10,6 +10,7 @@ import Login from './components/Login';
 import Register from './components/Register';
 import AdminChallenges from './components/AdminChallenges';
 import './index.css';
+import Modal from './components/Modal';
 
 function App() {
   return (
@@ -30,6 +31,7 @@ function App() {
           <Route path="/challenges" element={<ChallengesSection />} />
           <Route path="/admin/challenges" element={<AdminChallenges />} />
           <Route path="/register" element={<Register />} />
+          <Route path="/modaldate" element={<Modal />} />
         </Routes>
       </Router>
     </AuthProvider>
