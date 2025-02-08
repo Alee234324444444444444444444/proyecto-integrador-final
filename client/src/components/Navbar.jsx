@@ -31,7 +31,7 @@ function Navbar() {
       <div className="navbar-actions">
         {isAuthenticated ? (
           <>
-            <span className="welcome-message">Hola, {user?.username}</span>
+            <span className="welcome-message">{user?.username}</span>
             <button onClick={handleLogout} className="login-btn">
               Cerrar Sesión
             </button>

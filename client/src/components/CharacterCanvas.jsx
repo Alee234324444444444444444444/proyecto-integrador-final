@@ -25,7 +25,7 @@ function CharacterCanvas() {
   const FRAME_HEIGHT = 500;
   const totalFrames = 2;
   let currentFrame = 0;
-  let dragonFrame = 0; // Frame del dragón
+  let dragonFrame = 0; 
   let frameCounter = 0;
   const frameSpeed = 120;
   const [dragonFrameSpeed, setDragonFrameSpeed] = useState(20); // Velocidad del dragón, más rápido que el personaje

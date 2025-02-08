@@ -12,8 +12,8 @@
 }
 
 .navbar-brand .logo img {
-  width: 100px;
-  height: 90px; 
+  width: 70px;
+  height: 70px; 
   border-radius: 15px; 
   object-fit: fill; 
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
@@ -32,6 +32,7 @@
   padding: 8px 15px;
   border-radius: 10px;
   transition: background-color 0.3s;
+  text-transform: uppercase;
 }
 
 .navbar-links a:hover {
@@ -52,13 +53,14 @@
 .navbar-actions .login-btn {
   background-color: #81231e;
   color: white;
-  font-size: 1.2em;
+  font-size: 1em;
   font-weight: bold;
   padding: 10px 20px;
   border-radius: 10px;
   cursor: pointer;
   transition: background-color 0.3s;
   border: none;
+  border: 1px solid #f0f4f8;
 }
 
 .navbar-actions .login-btn:hover {
