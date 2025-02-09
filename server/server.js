@@ -54,7 +54,7 @@ const port = process.env.PORT || 3000;
 sequelize.authenticate()
   .then(() => {
     console.log('✅ Conexión a PostgreSQL establecida correctamente');
-    return sequelize.sync({ force: true });
+    return sequelize.sync({ force: false });
   })
   .then(() => {
     console.log('✅ Modelos sincronizados con la base de datos');
