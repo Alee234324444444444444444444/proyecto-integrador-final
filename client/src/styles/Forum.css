@@ -1,17 +1,18 @@
 .foro {
-  background-color: #151d26;
-  border-radius: 15px;
+  background-color: #2d4459;
+  border-radius: 20px;
   padding: 20px;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
   margin-top: 30px;
   width: 80%;
   margin: 0 auto;
   max-width: 1200px;
+  border: 1px solid white;
 }
 
 .foro h3 {
   text-align: center;
-  color: #f9fafb;
+  color: #f0f4f8;
   margin-bottom: 15px;
   font-size: 1.5rem;
 }
@@ -19,9 +20,9 @@
 .foro-textarea {
   width: 98%;
   color: #f9fafb;
-  background-color: #304d73;
+  background-color: #f9fafb;
   border: 1px solid #f9fafb;
-  border-radius: 10px;
+  border-radius: 20px;
   font-size: 1em;
   padding: 10px;
   margin-bottom: 15px;
@@ -30,21 +31,28 @@
 }
 
 .btn-publicar {
-  background-color: #81231e;
-  color: white;
+  background-color: #151d26;
+  color: #f9fafb;
   font-weight: 600;
   padding: 10px 20px;
-  border-radius: 10px;
+  border-radius: 20px;
   cursor: pointer;
   display: inline-block;
   margin: 5px 0;
   transition: background-color 0.3s;
   width: auto;
   min-width: 120px;
+  border: 1px solid #f9fafb;
+  transition: transform 0.4s ease-in-out, 
+    background-color 0.3s ease-in-out;
 }
 
 .btn-publicar:hover {
-  background-color: #a66414;
+  background-color: #f9fafb;
+  color: #151d26;
+  transform: translateX(20px);
+  border: 1px solid #151d26;
+
 }
 
 .comentario-item {
@@ -54,11 +62,12 @@
 }
 
 .comentario-box {
-  background-color: #304d73;
+  background-color: #426a8c;
   padding: 15px;
   border-radius: 8px;
   color: #f9fafb;
   word-wrap: break-word;
+  border: 1px solid white;
 }
 
 .comment-date {
@@ -99,7 +108,7 @@
 }
 
 .icon-button.delete:hover {
-  color: #ff4444;
+  color: #81231e;
   background-color: rgba(255, 68, 68, 0.1);
 }
 

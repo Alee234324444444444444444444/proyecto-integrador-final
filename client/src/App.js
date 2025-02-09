@@ -9,6 +9,8 @@ import Forum from './components/Forum';
 import Login from './components/Login';
 import Register from './components/Register';
 import AdminChallenges from './components/AdminChallenges';
+import ReportTable from './components/ReportTable.jsx';
+import Posts from './pages/Posts';
 import './index.css';
 
 function App() {
@@ -22,7 +24,6 @@ function App() {
               <Header />
               <CharacterCanvas />
               <ChallengesSection />
-              <Forum />
             </>
           } />
           <Route path="/login" element={<Login />} />
@@ -30,6 +31,12 @@ function App() {
           <Route path="/challenges" element={<ChallengesSection />} />
           <Route path="/admin/challenges" element={<AdminChallenges />} />
           <Route path="/register" element={<Register />} />
+          <Route path="/reports" element={<ReportTable/>} />
+          <Route path="/publicaciones" element={
+            <>
+              <Posts />
+              <Forum />
+            </>} />
         </Routes>
       </Router>
     </AuthProvider>

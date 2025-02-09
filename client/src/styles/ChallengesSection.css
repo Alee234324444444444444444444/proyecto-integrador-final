@@ -1,4 +1,3 @@
-/* ChallengesContainer.css */
 .challenges-container {
   margin: 20px auto;
   padding: 15px;
@@ -8,6 +7,8 @@
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
   text-align: center;
   width: 90%;
+  margin-bottom: 3em;
+  border: 1px solid white;
 }
 
 .challenges-container ul {
@@ -29,7 +30,7 @@
 }
 
 .challenges-container button {
-  background-color: #a66414;
+  background-color: #151d26;
   color: white;
   font-weight: 600;
   padding: 8px 12px;
@@ -38,10 +39,16 @@
   transition: background-color 0.3s;
   width: 100%;
   max-width: 150px;
+  border: 1px solid #f0f4f8;
+  transition: transform 0.5s ease-in-out, 
+    background-color 0.3s ease-in-out;
 }
 
 .challenges-container button:hover {
-  background-color: #81231e;
+  background-color: #f9fafb;
+  color: #151d26;
+  transform: translateX(-20px);
+  border: 1px solid #151d26;
 }
 
 /* Media Queries */

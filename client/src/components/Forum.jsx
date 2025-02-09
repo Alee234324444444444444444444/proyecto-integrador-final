@@ -165,7 +165,7 @@ function Forum() {
             <li key={comment.id} className="comentario-item">
               <div className="comentario-box">
                 <div className="comentario-header">
-                  <strong>{comment.User?.username}</strong>
+                  <strong>OP: {comment.User?.username}</strong>
                   <span className="comment-date">
                     {new Date(comment.created_at).toLocaleString()}
                   </span>

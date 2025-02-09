@@ -5,12 +5,14 @@ const cors = require('cors');
 const commentsRoutes = require('./routes/comments');
 const app = express();
 const challengeRoutes = require('./routes/challengeRoutes');
+const reportsRoutes = require('./routes/reports'); 
+const postsRouter = require('./routes/posts');
 
 // 1. Middlewares básicos
 app.use(cors({
   origin: 'http://localhost:3001',
   credentials: true,
-  methods: ['GET', 'POST', 'PUT', 'DELETE'],
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH'],
   allowedHeaders: ['Content-Type','Authorization']
 }));
 app.use(express.json());
@@ -29,6 +31,10 @@ app.use((req, res, next) => {
 app.use('/api/auth', require('./routes/auth'));
 app.use('/comments', commentsRoutes);
 app.use('/api/challenges', challengeRoutes);
+app.use('/api/posts', postsRouter);
+app.use('/reports', reportsRoutes);
+
+app.use('/uploads', express.static('uploads'));
 
 // 4. Manejo de errores 
 app.use((err, req, res, next) => {

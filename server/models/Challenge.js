@@ -20,7 +20,7 @@ const Challenge = sequelize.define('Challenge', {
     type: DataTypes.STRING(10),
     allowNull: false,
     validate: {
-      isIn: [['daily', 'weekly']] // Validación del tipo de challenge
+      isIn: [['daily', 'weekly']]
     }
   },
   completed: {
@@ -30,6 +30,14 @@ const Challenge = sequelize.define('Challenge', {
   due_date: {
     type: DataTypes.DATE,
     allowNull: true
+  },
+  reward_id: {
+    type: DataTypes.INTEGER,
+    allowNull: false,
+    references: {
+      model: 'reward',
+      key: 'id'
+    }
   }
 }, {
   tableName: 'challenge',

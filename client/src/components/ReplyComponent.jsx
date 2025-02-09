@@ -31,7 +31,7 @@ const ReplyComponent = ({
   return (
     <div className={`reply-container level-${level}`}>
       <div className="reply-header">
-        <strong>{reply.User?.username}</strong>
+        <strong>OP: {reply.User?.username}</strong>
         <span className="reply-date">
           {new Date(reply.created_at).toLocaleString()}
         </span>
