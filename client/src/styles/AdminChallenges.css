@@ -98,6 +98,11 @@
     border-radius: 3px;
     font-size: 0.875rem;
   }
+
+  .reward-info img{
+    height: 350px;
+    width: 350px;
+  }
   
   /* Sección de posts */
   .posts-list {
