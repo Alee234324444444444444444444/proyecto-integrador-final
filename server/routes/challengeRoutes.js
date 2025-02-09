@@ -1,7 +1,21 @@
 const express = require('express');
-const { Challenge, Superuser } = require('../models');
+const { Challenge, Superuser, Reward } = require('../models');
 const auth = require('../middleware/auth');
 const router = express.Router();
+const multer = require('multer');
+const path = require('path');
+
+// Configurar multer para las imágenes de recompensas
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, 'uploads/rewards/');
+  },
+  filename: (req, file, cb) => {
+    cb(null, Date.now() + path.extname(file.originalname));
+  }
+});
+
+const upload = multer({ storage });
 
 // Middleware para verificar si el usuario es Superuser
 const isSuperuser = async (req, res, next) => {
@@ -16,32 +30,95 @@ const isSuperuser = async (req, res, next) => {
   }
 };
 
-// Obtener todos los desafíos
+// Obtener todos los desafíos con sus recompensas
 router.get('/', async (req, res) => {
-    try {
-      const challenges = await Challenge.findAll();
-      res.json(challenges);
-    } catch (error) {
-      console.error("Error al obtener desafíos:", error);
-      res.status(500).json({ message: "Error en el servidor" });
-    }
-  });
-  
-// Ruta para añadir desafío
-router.post('/add', auth, isSuperuser, async (req, res) => {
   try {
-    const { title, description, type, due_date } = req.body;
+    const challenges = await Challenge.findAll({
+      include: [
+        {
+          model: Reward,
+          attributes: ['id', 'name', 'image']
+        }
+      ]
+    });
+    res.json(challenges);
+  } catch (error) {
+    console.error("Error al obtener desafíos:", error);
+    res.status(500).json({ message: "Error en el servidor" });
+  }
+});
+
+// Ruta para añadir desafío con recompensa
+router.post('/add', auth, isSuperuser, upload.single('rewardImage'), async (req, res) => {
+  try {
+    const { title, description, type, due_date, rewardName } = req.body;
+
+    // Primero crear la recompensa
+    const reward = await Reward.create({
+      name: rewardName,
+      image: `/uploads/rewards/${req.file.filename}`
+    });
+
+    // Luego crear el desafío
     const challenge = await Challenge.create({
       title,
       description,
       type,
       due_date,
       superuser_id: req.userId,
+      reward_id: reward.id
     });
-    res.status(201).json(challenge);
+
+    res.status(201).json({
+      challenge,
+      reward
+    });
   } catch (error) {
     console.error("Error al crear desafío:", error);
     res.status(500).json({ message: "Error al crear el desafío" });
+  }
+});
+
+// Actualizar un desafío
+router.put('/:id', auth, isSuperuser, async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { title, description, type, due_date } = req.body;
+
+    const challenge = await Challenge.findByPk(id);
+    if (!challenge) {
+      return res.status(404).json({ message: "Desafío no encontrado" });
+    }
+
+    await challenge.update({
+      title,
+      description,
+      type,
+      due_date
+    });
+
+    res.json(challenge);
+  } catch (error) {
+    console.error("Error al actualizar desafío:", error);
+    res.status(500).json({ message: "Error al actualizar el desafío" });
+  }
+});
+
+// Eliminar un desafío
+router.delete('/:id', auth, isSuperuser, async (req, res) => {
+  try {
+    const { id } = req.params;
+    const challenge = await Challenge.findByPk(id);
+    
+    if (!challenge) {
+      return res.status(404).json({ message: "Desafío no encontrado" });
+    }
+
+    await challenge.destroy();
+    res.json({ message: "Desafío eliminado correctamente" });
+  } catch (error) {
+    console.error("Error al eliminar desafío:", error);
+    res.status(500).json({ message: "Error al eliminar el desafío" });
   }
 });
 

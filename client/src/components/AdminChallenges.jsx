@@ -10,11 +10,14 @@ const AdminChallenges = () => {
   const [challenges, setChallenges] = useState([]);
   const [posts, setPosts] = useState([]);
   const [activeTab, setActiveTab] = useState('challenges');
+  const [editingChallenge, setEditingChallenge] = useState(null);
   const [formData, setFormData] = useState({
     title: '',
     description: '',
     type: 'daily',
-    due_date: ''
+    due_date: '',
+    rewardName: '',
+    rewardImage: null
   });
 
   useEffect(() => {
@@ -50,14 +53,91 @@ const AdminChallenges = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await axios.post('http://localhost:3000/api/challenges/add', formData, {
-        headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
-      });
+      const formDataToSend = new FormData();
+      formDataToSend.append('title', formData.title);
+      formDataToSend.append('description', formData.description);
+      formDataToSend.append('type', formData.type);
+      formDataToSend.append('due_date', formData.due_date);
+      formDataToSend.append('rewardName', formData.rewardName);
+      formDataToSend.append('rewardImage', formData.rewardImage);
+
+      await axios.post('http://localhost:3000/api/challenges/add', 
+        formDataToSend,
+        {
+          headers: { 
+            Authorization: `Bearer ${localStorage.getItem('token')}`,
+            'Content-Type': 'multipart/form-data'
+          }
+        }
+      );
+      
       fetchChallenges();
-      setFormData({ title: '', description: '', type: 'daily', due_date: '' });
+      setFormData({
+        title: '',
+        description: '',
+        type: 'daily',
+        due_date: '',
+        rewardName: '',
+        rewardImage: null
+      });
     } catch (error) {
       console.error('Error al crear desafío', error);
       alert('No se pudo crear el desafío');
+    }
+  };
+
+  const handleDelete = async (challengeId) => {
+    if (window.confirm('¿Estás seguro de que quieres eliminar este desafío?')) {
+      try {
+        await axios.delete(`http://localhost:3000/api/challenges/${challengeId}`, {
+          headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
+        });
+        fetchChallenges();
+      } catch (error) {
+        console.error('Error al eliminar desafío', error);
+      }
+    }
+  };
+
+  const handleEdit = async (challengeId) => {
+    const challenge = challenges.find(c => c.id === challengeId);
+    setEditingChallenge(challenge);
+    setFormData({
+      ...formData,
+      title: challenge.title,
+      description: challenge.description,
+      type: challenge.type,
+      due_date: challenge.due_date
+    });
+  };
+
+  const handleUpdate = async (e) => {
+    e.preventDefault();
+    try {
+      await axios.put(`http://localhost:3000/api/challenges/${editingChallenge.id}`,
+        {
+          title: formData.title,
+          description: formData.description,
+          type: formData.type,
+          due_date: formData.due_date
+        },
+        {
+          headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
+        }
+      );
+      
+      setEditingChallenge(null);
+      fetchChallenges();
+      setFormData({
+        title: '',
+        description: '',
+        type: 'daily',
+        due_date: '',
+        rewardName: '',
+        rewardImage: null
+      });
+    } catch (error) {
+      console.error('Error al actualizar desafío', error);
     }
   };
 
