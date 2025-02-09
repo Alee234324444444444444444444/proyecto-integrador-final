@@ -7,6 +7,7 @@ const challengeRoutes = require('./routes/challengeRoutes');
 const reportsRoutes = require('./routes/reports'); 
 const postsRouter = require('./routes/posts');
 const rewardsRouter = require('./routes/rewards');
+const perfil = require('./routes/perfil');
 const path = require('path');
 
 const app = express();
@@ -38,7 +39,7 @@ app.use('/api/challenges', challengeRoutes);
 app.use('/api/posts', postsRouter);
 app.use('/reports', reportsRoutes);
 app.use('/uploads', express.static('uploads'));
-
+app.use('/perfil', perfil);
 app.use('/rewards', express.static(path.join(__dirname, '../client/src/rewards')));
 
 // 4. Manejo de errores 

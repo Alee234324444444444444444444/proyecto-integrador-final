@@ -10,6 +10,7 @@ import Login from './components/Login';
 import Register from './components/Register';
 import AdminChallenges from './components/AdminChallenges';
 import ReportTable from './components/ReportTable.jsx';
+import Perfil from './components/Perfil.jsx';
 import Posts from './pages/Posts';
 import './index.css';
 
@@ -37,6 +38,7 @@ function App() {
               <Posts />
               <Forum />
             </>} />
+            <Route path="/perfil" element={<Perfil/>} />
         </Routes>
       </Router>
     </AuthProvider>

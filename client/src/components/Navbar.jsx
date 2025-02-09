@@ -28,7 +28,10 @@ function Navbar() {
         )}
         <li><Link to="/challenges">Desafíos</Link></li>
         {isAuthenticated &&(
+          <>
           <li><Link to="/reports">Rankings</Link></li>
+          <li><Link to="/perfil">Perfil</Link></li>
+          </>
         )}
       </ul>
       <div className="navbar-actions">
