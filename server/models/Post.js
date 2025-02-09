@@ -1,7 +1,5 @@
 const { DataTypes } = require('sequelize');
 const sequelize = require('../config/database');
-const User = require('./User');
-const Challenge = require('./Challenge');
 
 const Post = sequelize.define('Post', {
   id: {
@@ -37,8 +35,5 @@ const Post = sequelize.define('Post', {
   tableName: 'post',
   timestamps: false
 });
-
-Post.belongsTo(User, { foreignKey: 'user_id', onDelete: 'CASCADE' });
-Post.belongsTo(Challenge, { foreignKey: 'challenge_id', onDelete: 'CASCADE' });
 
 module.exports = Post;

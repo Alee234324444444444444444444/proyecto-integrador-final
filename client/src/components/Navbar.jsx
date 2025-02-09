@@ -27,6 +27,9 @@ function Navbar() {
         <li><Link to="/admin/challenges">Admin Desafíos</Link></li>
         )}
         <li><Link to="/challenges">Desafíos</Link></li>
+        {isAuthenticated &&(
+          <li><Link to="/reports">Rankings</Link></li>
+        )}
       </ul>
       <div className="navbar-actions">
         {isAuthenticated ? (

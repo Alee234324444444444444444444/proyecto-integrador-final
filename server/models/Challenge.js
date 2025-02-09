@@ -1,6 +1,5 @@
 const { DataTypes } = require('sequelize');
 const sequelize = require('../config/database');
-const Superuser = require('./Superuser');
 
 const Challenge = sequelize.define('Challenge', {
   id: {
@@ -31,20 +30,13 @@ const Challenge = sequelize.define('Challenge', {
     type: DataTypes.DATE,
     allowNull: true
   },
-  reward_id: {
+  reward_id: {  // Añadimos esta columna
     type: DataTypes.INTEGER,
-    allowNull: false,
-    references: {
-      model: 'reward',
-      key: 'id'
-    }
+    allowNull: true
   }
 }, {
   tableName: 'challenge',
   timestamps: false
 });
-
-// Relación con Superuser
-Challenge.belongsTo(Superuser, { foreignKey: 'superuser_id', onDelete: 'SET NULL' });
 
 module.exports = Challenge;

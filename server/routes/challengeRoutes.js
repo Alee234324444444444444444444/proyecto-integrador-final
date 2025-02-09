@@ -2,20 +2,7 @@ const express = require('express');
 const { Challenge, Superuser, Reward } = require('../models');
 const auth = require('../middleware/auth');
 const router = express.Router();
-const multer = require('multer');
 const path = require('path');
-
-// Configurar multer para las imágenes de recompensas
-const storage = multer.diskStorage({
-  destination: (req, file, cb) => {
-    cb(null, 'uploads/rewards/');
-  },
-  filename: (req, file, cb) => {
-    cb(null, Date.now() + path.extname(file.originalname));
-  }
-});
-
-const upload = multer({ storage });
 
 // Middleware para verificar si el usuario es Superuser
 const isSuperuser = async (req, res, next) => {
@@ -34,12 +21,10 @@ const isSuperuser = async (req, res, next) => {
 router.get('/', async (req, res) => {
   try {
     const challenges = await Challenge.findAll({
-      include: [
-        {
-          model: Reward,
-          attributes: ['id', 'name', 'image']
-        }
-      ]
+      include: [{
+        model: Reward,
+        required: false
+      }]
     });
     res.json(challenges);
   } catch (error) {
@@ -49,33 +34,53 @@ router.get('/', async (req, res) => {
 });
 
 // Ruta para añadir desafío con recompensa
-router.post('/add', auth, isSuperuser, upload.single('rewardImage'), async (req, res) => {
+router.post('/add', auth, isSuperuser, async (req, res) => {
   try {
-    const { title, description, type, due_date, rewardName } = req.body;
+    console.log('Datos recibidos:', req.body); // Para debug
 
-    // Primero crear la recompensa
-    const reward = await Reward.create({
-      name: rewardName,
-      image: `/uploads/rewards/${req.file.filename}`
-    });
+    const { title, description, type, due_date, rewardType, rewardName, rewardConfig } = req.body;
 
-    // Luego crear el desafío
+    // Validar que los campos requeridos existan
+    if (!title || !description || !type) {
+      return res.status(400).json({ 
+        message: "Faltan campos requeridos",
+        required: { title, description, type }
+      });
+    }
+
+    // Crear el desafío
     const challenge = await Challenge.create({
       title,
       description,
       type,
       due_date,
       superuser_id: req.userId,
-      reward_id: reward.id
     });
 
-    res.status(201).json({
-      challenge,
-      reward
-    });
+    // Si se proporcionó el tipo de recompensa, crear la recompensa
+    if (rewardType && rewardName) {
+      const reward = await Reward.create({
+        name: rewardName,
+        type: rewardType,
+        image: `/rewards/assets/${rewardType}.png`,
+        config: rewardConfig,
+        challenge_id: challenge.id
+      });
+
+      res.status(201).json({
+        challenge,
+        reward
+      });
+    } else {
+      res.status(201).json({ challenge });
+    }
+
   } catch (error) {
     console.error("Error al crear desafío:", error);
-    res.status(500).json({ message: "Error al crear el desafío" });
+    res.status(500).json({ 
+      message: "Error al crear el desafío",
+      error: error.message 
+    });
   }
 });
 

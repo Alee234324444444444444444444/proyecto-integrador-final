@@ -3,6 +3,7 @@ import axios from 'axios';
 import { useAuth } from '../context/AuthContext';
 import { useNavigate } from 'react-router-dom';
 import '../styles/AdminChallenges.css';
+import { PREDEFINED_REWARDS } from '../rewards';
 
 const AdminChallenges = () => {
   const { user, isAuthenticated } = useAuth();
@@ -53,49 +54,54 @@ const AdminChallenges = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const formDataToSend = new FormData();
-      formDataToSend.append('title', formData.title);
-      formDataToSend.append('description', formData.description);
-      formDataToSend.append('type', formData.type);
-      formDataToSend.append('due_date', formData.due_date);
-      formDataToSend.append('rewardName', formData.rewardName);
-      formDataToSend.append('rewardImage', formData.rewardImage);
-
-      await axios.post('http://localhost:3000/api/challenges/add', 
-        formDataToSend,
+      console.log('Enviando datos:', formData); // Para debug
+  
+      const selectedReward = Object.values(PREDEFINED_REWARDS)
+        .find(reward => reward.id === formData.rewardType);
+  
+      // Crear el objeto de datos a enviar
+      const challengeData = {
+        title: formData.title,
+        description: formData.description,
+        type: formData.type,
+        due_date: formData.due_date
+      };
+  
+      // Si hay una recompensa seleccionada, añadir su información
+      if (selectedReward) {
+        challengeData.rewardName = selectedReward.name;
+        challengeData.rewardType = selectedReward.id;
+        challengeData.rewardConfig = JSON.stringify(
+          selectedReward.type === 'static' ? selectedReward.renderConfig : selectedReward.spriteConfig
+        );
+      }
+  
+      const response = await axios.post(
+        'http://localhost:3000/api/challenges/add', 
+        challengeData,
         {
           headers: { 
             Authorization: `Bearer ${localStorage.getItem('token')}`,
-            'Content-Type': 'multipart/form-data'
+            'Content-Type': 'application/json'
           }
         }
       );
       
+      console.log('Respuesta:', response.data); // Para debug
+  
+      // Limpiar el formulario y actualizar la lista
       fetchChallenges();
       setFormData({
         title: '',
         description: '',
         type: 'daily',
         due_date: '',
-        rewardName: '',
-        rewardImage: null
+        rewardType: ''
       });
+  
     } catch (error) {
       console.error('Error al crear desafío', error);
       alert('No se pudo crear el desafío');
-    }
-  };
-
-  const handleDelete = async (challengeId) => {
-    if (window.confirm('¿Estás seguro de que quieres eliminar este desafío?')) {
-      try {
-        await axios.delete(`http://localhost:3000/api/challenges/${challengeId}`, {
-          headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
-        });
-        fetchChallenges();
-      } catch (error) {
-        console.error('Error al eliminar desafío', error);
-      }
     }
   };
 
@@ -109,6 +115,19 @@ const AdminChallenges = () => {
       type: challenge.type,
       due_date: challenge.due_date
     });
+  };
+
+  const handleDelete = async (challengeId) => {
+    if (window.confirm('¿Estás seguro de que quieres eliminar este desafío?')) {
+      try {
+        await axios.delete(`http://localhost:3000/api/challenges/${challengeId}`, {
+          headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
+        });
+        fetchChallenges();
+      } catch (error) {
+        console.error('Error al eliminar desafío', error);
+      }
+    }
   };
 
   const handleUpdate = async (e) => {
@@ -214,16 +233,45 @@ const AdminChallenges = () => {
                 onChange={(e) => setFormData({ ...formData, due_date: e.target.value })}
               />
             </div>
+            <div className="form-group">
+              <label>Seleccionar Recompensa</label>
+              <select
+                value={formData.rewardType}
+                onChange={(e) => setFormData({ ...formData, rewardType: e.target.value })}
+                required
+              >
+              <option value="">Seleccionar Recompensa</option>
+              {Object.entries(PREDEFINED_REWARDS).map(([key, reward]) => (
+                <option key={reward.id} value={reward.id}>
+                  {reward.name}
+                </option>
+                ))}
+              </select>
+            </div>
             <button type="submit" className="submit-button">Añadir Desafío</button>
           </form>
 
-          <h3 class="adm-ch-h3">Lista de Desafíos</h3>
+          <h3 className="adm-ch-h3">Lista de Desafíos</h3>
           <div className="challenges-list">
             {challenges.map((challenge) => (
               <div key={challenge.id} className="challenge-item">
                 <h4>{challenge.title}</h4>
                 <p>{challenge.description}</p>
                 <span className="challenge-type">{challenge.type}</span>
+                <div className="challenge-actions">
+                  <button onClick={() => handleEdit(challenge.id)}>Editar</button>
+                  <button onClick={() => handleDelete(challenge.id)}>Eliminar</button>
+                </div>
+                {challenge.Reward && (
+                  <div className="reward-info">
+                    <p>Recompensa: {challenge.Reward.name}</p>
+                    <img 
+                      src={`http://localhost:3000${challenge.Reward.image}`} 
+                      alt="Recompensa" 
+                      className="reward-preview"
+                    />
+                  </div>
+                )}
               </div>
             ))}
           </div>

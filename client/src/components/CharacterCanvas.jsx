@@ -1,23 +1,53 @@
 import React, { useEffect, useRef, useState } from 'react';
+import axios from 'axios';
+import { useAuth } from '../context/AuthContext';
 import Swal from 'sweetalert2';
 import '../styles/CharacterCanvas.css';
 import spriteSheetPath from '../images/spritesheet.png';
-import hatImagePath from '../images/hat.png';
-import dragonImagePath from '../images/dragon.png';  // Nuevo sprite animado del dragón
-import shieldImagePath from '../images/shield.png';  // Sprite estático del escudo
 import backgroundImagePath from '../images/background.jpg';
+
+const REWARD_CONFIGS = {
+  'hat': {
+    type: 'static',
+    renderConfig: {
+      offsetX: 50,
+      offsetY: -0,
+      width: 400,
+      height: 400
+    }
+  },
+  'dragon': {
+    type: 'animated',
+    spriteConfig: {
+      frameWidth: 1280,
+      frameHeight: 1280,
+      totalFrames: 2,
+      frameSpeed: 20,
+      renderWidth: 325,
+      renderHeight: 325,
+      offsetX: 400,
+      offsetY: -200
+    }
+  },
+  'shield': {
+    type: 'static',
+    renderConfig: {
+      offsetX: 30,
+      offsetY: 100,
+      width: 300,
+      height: 300
+    }
+  }
+};
 
 function CharacterCanvas() {
   const canvasRef = useRef(null);
   const spriteSheetRef = useRef(new Image());
-  const hatImageRef = useRef(new Image());
-  const dragonImageRef = useRef(new Image());
-  const shieldImageRef = useRef(new Image());
   const backgroundImageRef = useRef(new Image());
-
-  const [isHatEquipped, setIsHatEquipped] = useState(false);
-  const [isDragonEquipped, setIsDragonEquipped] = useState(false);
-  const [isShieldEquipped, setIsShieldEquipped] = useState(false);
+  const [unlockedRewards, setUnlockedRewards] = useState([]);
+  const [equippedRewards, setEquippedRewards] = useState([]);
+  const [rewardFrames, setRewardFrames] = useState({});
+  const { user, isAuthenticated } = useAuth();
 
   const CANVAS_WIDTH = 900;
   const CANVAS_HEIGHT = 900;
@@ -25,20 +55,209 @@ function CharacterCanvas() {
   const FRAME_HEIGHT = 500;
   const totalFrames = 2;
   let currentFrame = 0;
-  let dragonFrame = 0; 
   let frameCounter = 0;
   const frameSpeed = 120;
-  const [dragonFrameSpeed, setDragonFrameSpeed] = useState(20); // Velocidad del dragón, más rápido que el personaje
-  let dragonFrameCounter = 0; // Contador de cuadros del dragón
+
+  useEffect(() => {
+    if (isAuthenticated) {
+      fetchUnlockedRewards();
+      fetchEquippedRewards();
+    }
+  }, [isAuthenticated]);
+
+  const fetchUnlockedRewards = async () => {
+    try {
+      const token = localStorage.getItem('token');
+      const response = await axios.get('http://localhost:3000/api/rewards/unlocked', {
+        headers: { Authorization: `Bearer ${token}` }
+      });
+      setUnlockedRewards(response.data);
+    } catch (error) {
+      console.error('Error al obtener recompensas:', error);
+    }
+  };
+
+  const fetchEquippedRewards = async () => {
+    try {
+      const token = localStorage.getItem('token');
+      const response = await axios.get('http://localhost:3000/api/rewards/equipped', {
+        headers: { Authorization: `Bearer ${token}` }
+      });
+      
+      const equipped = await Promise.all(response.data.map(async (reward) => {
+        const rewardImage = new Image();
+        rewardImage.src = `http://localhost:3000${reward.image}`;
+        
+        // Esperar a que la imagen se cargue
+        await new Promise((resolve) => {
+          rewardImage.onload = resolve;
+          rewardImage.onerror = resolve; // Por si hay error en la carga
+        });
+        
+        // Inicializar frames si es una recompensa animada
+        if (REWARD_CONFIGS[reward.type]?.type === 'animated') {
+          setRewardFrames(prev => ({
+            ...prev,
+            [reward.id]: {
+              currentFrame: 0,
+              frameCounter: 0
+            }
+          }));
+        }
+        
+        return { ...reward, image: rewardImage };
+      }));
+      
+      setEquippedRewards(equipped);
+    } catch (error) {
+      console.error('Error al cargar recompensas equipadas:', error);
+    }
+  };
+
+  const toggleReward = async (rewardId) => {
+    try {
+      const token = localStorage.getItem('token');
+      const response = await axios.post('http://localhost:3000/api/rewards/equip',
+        { rewardId },
+        { headers: { Authorization: `Bearer ${token}` }}
+      );
+  
+      if (response.data.message.includes('desequipada')) {
+        setEquippedRewards(prev => prev.filter(r => r.id !== rewardId));
+        // Limpiar los frames de la recompensa desequipada
+        setRewardFrames(prev => {
+          const newFrames = { ...prev };
+          delete newFrames[rewardId];
+          return newFrames;
+        });
+        
+        Swal.fire({
+          title: '¡Recompensa desequipada!',
+          text: 'Has desequipado la recompensa',
+          icon: 'success'
+        });
+      } else {
+        const reward = unlockedRewards.find(r => r.id === rewardId);
+        const rewardImage = new Image();
+        rewardImage.src = `http://localhost:3000${reward.image}`;
+        
+        // Asegurarnos de que la imagen se cargue antes de mostrarla
+        await new Promise((resolve) => {
+          rewardImage.onload = resolve;
+        });
+  
+        const config = REWARD_CONFIGS[reward.type];
+        if (config?.type === 'animated') {
+          setRewardFrames(prev => ({
+            ...prev,
+            [reward.id]: {
+              currentFrame: 0,
+              frameCounter: 0
+            }
+          }));
+        }
+        
+        setEquippedRewards(prev => [...prev, { ...reward, image: rewardImage }]);
+        
+        Swal.fire({
+          title: '¡Recompensa equipada!',
+          text: `Has equipado: ${reward.name}`,
+          icon: 'success'
+        });
+      }
+  
+      // Recargar las recompensas equipadas
+      await fetchEquippedRewards();
+  
+    } catch (error) {
+      console.error('Error al gestionar recompensa:', error);
+      Swal.fire({
+        title: 'Error',
+        text: error.response?.data?.message || 'Error al gestionar la recompensa',
+        icon: 'error'
+      });
+    }
+  };
+
+  const drawReward = (ctx, reward, characterX, characterY) => {
+    if (!reward.image.complete) return;
+  
+    const config = REWARD_CONFIGS[reward.type];
+    if (!config) return;
+  
+    if (config.type === 'static') {
+      const { offsetX, offsetY, width, height } = config.renderConfig;
+      ctx.drawImage(
+        reward.image,
+        characterX + offsetX,
+        characterY + offsetY,
+        width,
+        height
+      );
+    } else if (config.type === 'animated') {
+      const {
+        frameWidth,
+        frameHeight,
+        totalFrames,
+        frameSpeed,
+        renderWidth,
+        renderHeight,
+        offsetX,
+        offsetY
+      } = config.spriteConfig;
+  
+      const frameData = rewardFrames[reward.id];
+      // Verificar si existen los datos de frames
+      if (!frameData) {
+        setRewardFrames(prev => ({
+          ...prev,
+          [reward.id]: {
+            currentFrame: 0,
+            frameCounter: 0
+          }
+        }));
+        return;
+      }
+  
+      // Draw the current frame
+      ctx.drawImage(
+        reward.image,
+        frameData.currentFrame * frameWidth, 0,
+        frameWidth, frameHeight,
+        characterX + offsetX,
+        characterY + offsetY,
+        renderWidth,
+        renderHeight
+      );
+  
+      // Update frame counters
+      requestAnimationFrame(() => {
+        setRewardFrames(prev => {
+          const currentFrameData = prev[reward.id];
+          if (!currentFrameData) return prev;
+  
+          const newFrameCounter = (currentFrameData.frameCounter + 1) % frameSpeed;
+          const newCurrentFrame = newFrameCounter === 0 
+            ? (currentFrameData.currentFrame + 1) % totalFrames 
+            : currentFrameData.currentFrame;
+  
+          return {
+            ...prev,
+            [reward.id]: {
+              currentFrame: newCurrentFrame,
+              frameCounter: newFrameCounter
+            }
+          };
+        });
+      });
+    }
+  };
 
   useEffect(() => {
     const canvas = canvasRef.current;
     const ctx = canvas.getContext("2d");
 
     spriteSheetRef.current.src = spriteSheetPath;
-    hatImageRef.current.src = hatImagePath;
-    dragonImageRef.current.src = dragonImagePath;
-    shieldImageRef.current.src = shieldImagePath;
     backgroundImageRef.current.src = backgroundImagePath;
 
     spriteSheetRef.current.onload = () => {
@@ -71,57 +290,33 @@ function CharacterCanvas() {
         frameCounter = 0;
       }
 
-      // Animación del dragón
-      dragonFrameCounter++;
-      if (dragonFrameCounter >= dragonFrameSpeed) { // Velocidad del dragón
-        dragonFrame = (dragonFrame + 1) % totalFrames;
-        dragonFrameCounter = 0;
-      }
-
-      // Dibujar recompensas si están equipadas
-      if (isHatEquipped) drawItem(ctx, hatImageRef.current, characterX + 50, characterY - 0, 400, 400);
-      if (isDragonEquipped) drawAnimatedDragon(ctx, characterX + 400, characterY - 200, 400, 400); // Animar dragón
-      if (isShieldEquipped) drawItem(ctx, shieldImageRef.current, characterX + 30, characterY + 100, 300, 300);
+      // Dibujar recompensas equipadas
+      equippedRewards.forEach(reward => {
+        drawReward(ctx, reward, characterX, characterY);
+      });
     }
-
-    function drawItem(ctx, image, x, y, width, height) {
-      if (image.complete) {
-        ctx.drawImage(image, x, y, width, height);
-      } else {
-        image.onload = () => ctx.drawImage(image, x, y, width, height);
-      }
-    }
-
-    function drawAnimatedDragon(ctx, x, y) {
-      const DRAGON_SPRITE_WIDTH = 1280;  // Ancho de un frame del dragón
-      const DRAGON_SPRITE_HEIGHT = 1280; // Alto del frame (en caso de que sea igual)
-      const DRAGON_TOTAL_FRAMES = 2; // Número de frames de la imagen
-      const SCALED_WIDTH = 325;  // Tamaño en el canvas
-      const SCALED_HEIGHT = 325;
-      
-      // Asegurarnos de cambiar de frame correctamente
-      const dragonSX = (dragonFrame % DRAGON_TOTAL_FRAMES) * DRAGON_SPRITE_WIDTH;
-  
-      ctx.drawImage(
-        dragonImageRef.current,
-        dragonSX, 0, DRAGON_SPRITE_WIDTH, DRAGON_SPRITE_HEIGHT,  // Recorte del sprite
-        x, y, SCALED_WIDTH, SCALED_HEIGHT  // Escalarlo en el canvas
-      );
-    }
-    
-  }, [isHatEquipped, isDragonEquipped, isShieldEquipped, dragonFrameSpeed]);
+  }, [equippedRewards, rewardFrames]);
 
   return (
     <div className="character-container">
       <div className="sidebar">
-        <h3>Recompensas</h3>
-        <button onClick={() => setIsHatEquipped(!isHatEquipped)}>Recompensa</button>
-        <button onClick={() => setIsDragonEquipped(!isDragonEquipped)}>Recompensa 2</button>
-        <button onClick={() => setIsShieldEquipped(!isShieldEquipped)}>Recompensa 3</button>
+        <h3>Recompensas Desbloqueadas</h3>
+        {unlockedRewards.map(reward => (
+          <div key={reward.id} className="reward-item">
+            <p>{reward.name}</p>
+            <p className="challenge-title">De: {reward.challengeTitle}</p>
+            <button 
+              onClick={() => toggleReward(reward.id)}
+              className={`equip-button ${equippedRewards.some(r => r.id === reward.id) ? 'equipped' : ''}`}
+            >
+              {equippedRewards.some(r => r.id === reward.id) ? 'Desequipar' : 'Equipar'}
+            </button>
+          </div>
+        ))}
       </div>
 
       <div className="canvas-wrapper">
-        <h1>Adán</h1>
+        <h1>ADAN</h1>
         <canvas ref={canvasRef} width={CANVAS_WIDTH} height={CANVAS_HEIGHT}></canvas>
       </div>
     </div>
