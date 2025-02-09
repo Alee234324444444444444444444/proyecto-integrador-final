@@ -29,6 +29,15 @@
   }
   
   /* Estilos del formulario */
+  .challenges-section h2{
+    color: #1a1f2e;
+  }
+
+  .adm-ch-h3 {
+    color: #1a1f2e;
+  }
+
+
   .challenge-form {
     background: #151d26;
     padding: 2rem;

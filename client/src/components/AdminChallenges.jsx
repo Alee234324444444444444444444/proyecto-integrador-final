@@ -137,7 +137,7 @@ const AdminChallenges = () => {
             <button type="submit" className="submit-button">Añadir Desafío</button>
           </form>
 
-          <h3>Lista de Desafíos</h3>
+          <h3 class="adm-ch-h3">Lista de Desafíos</h3>
           <div className="challenges-list">
             {challenges.map((challenge) => (
               <div key={challenge.id} className="challenge-item">

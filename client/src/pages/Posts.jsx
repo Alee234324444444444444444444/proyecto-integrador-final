@@ -73,7 +73,9 @@ function Posts() {
       <section className="all-posts-section">
         <h2>Todas las Publicaciones</h2>
         <div className="posts-grid">
-          {allPosts.map(post => (
+          {allPosts
+            .filter(post => post.status === 'approved')
+            .map(post => (
             <div key={post.id} className="post-grid-card">
               <div className="post-grid-title">
                 <h3>{post.Challenge?.title || 'Desafío'}</h3>
@@ -83,7 +85,7 @@ function Posts() {
               </div>
               <div className="post-grid-description">
                 <p>{post.description}</p>
-                <span className="post-author">Por: {post.User?.username}
+                <span className="post-author">OP: {post.User?.username}
                     <p>{new Date(post.created_at).toLocaleString()}</p>
                 </span>
               </div>
