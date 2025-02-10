@@ -4,21 +4,33 @@ const { sequelize } = require('../models');
 const auth = require('../middleware/auth');
 
 router.get('/', auth, async (req, res) => {
-
-  
   try {
-    const [results] = await sequelize.query(
-      'SELECT * FROM user_profile WHERE user_id = :userId',);
+    const userId = req.userId; 
 
-    if (!results || results.length === 0) {
-      console.log('No se encontraron resultados para el userId:', req.userId);
+    
+    const [results] = await sequelize.query(
+      'SELECT * FROM user_profile WHERE user_id = :userId',
+      {
+        replacements: { userId }, 
+        type: sequelize.QueryTypes.SELECT
+      }
+    );
+
+    if (!results) {
+      console.log('No se encontraron resultados para el userId:', userId);
       return res.status(404).json({ message: 'Usuario no encontrado' });
     }
+
+    // Log para debug
+    console.log('Perfil encontrado:', results);
 
     res.json(results);
   } catch (error) {
     console.error('Error al obtener el perfil:', error);
-    res.status(500).json({ error: 'Error al obtener el reporte del perfil.' });
+    res.status(500).json({ 
+      message: 'Error al obtener el reporte del perfil.',
+      error: error.message 
+    });
   }
 });
 
