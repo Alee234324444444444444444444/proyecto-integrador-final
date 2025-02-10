@@ -49,6 +49,12 @@ function Forum() {
 
   const handlePostComment = async () => {
     if (!newComment.trim() || !isAuthenticated) return;
+
+    if (newComment.length > 50) {
+      Swal.fire('Error', 'El comentario no puede superar los 50 caracteres', 'error');
+      return;
+    }
+
     try {
       const response = await axios.post(`${BASE_URL}/comments`, {
         username: user.username,
@@ -67,17 +73,17 @@ function Forum() {
 
   const handleReply = async (parentId, content) => {
     if (!content.trim() || !isAuthenticated) return;
-    
+
     try {
       const response = await axios.post(`${BASE_URL}/comments`, {
         username: user.username,
         content: content,
         parent_id: parentId,
       });
-      
+
       if (response.status === 201) {
         const newReply = response.data;
-        
+
         // Actualizar el estado local
         setComments(prevComments => {
           const updateReplies = (comments) => {
@@ -97,10 +103,10 @@ function Forum() {
               return comment;
             });
           };
-          
+
           return updateReplies(prevComments);
         });
-  
+
         // Mostrar mensaje de éxito
         Swal.fire('Éxito', 'Respuesta publicada con éxito', 'success');
       }
@@ -111,6 +117,11 @@ function Forum() {
   };
 
   const handleEdit = async (commentId, content) => {
+    if (content.length > 50) {
+      Swal.fire('Error', 'El comentario no puede superar los 50 caracteres', 'error');
+      return;  // No proceder si la longitud excede los 50 caracteres
+    }
+
     try {
       const response = await axios.put(`${BASE_URL}/comments/${commentId}`, {
         user_id: user.id,
@@ -132,7 +143,7 @@ function Forum() {
       const response = await axios.delete(`${BASE_URL}/comments/${commentId}`, {
         data: { user_id: user.id }
       });
-      
+
       if (response.status === 200) {
         await fetchComments(); // Recargar comentarios
         Swal.fire('Éxito', 'Comentario eliminado con éxito', 'success');
@@ -235,7 +246,7 @@ function Forum() {
                     </div>
                   </div>
                 )}
-                                
+                                 
                 {editingComment === comment.id ? (
                   <div className="edit-container">
                     <textarea
@@ -298,7 +309,7 @@ function Forum() {
             </li>
           ))
         ) : (
-          <p className="no-comments">No hay comentarios disponibles. ¡Sé el primero en comentar!</p>
+          <p>No hay comentarios aún.</p>
         )}
       </ul>
     </section>

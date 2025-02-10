@@ -56,6 +56,18 @@ function Login() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    // Validar el username (no puede contener puntos)
+    const usernameRegex = /^[a-zA-Z0-9_]+$/;
+    if (!usernameRegex.test(formData.username)) {
+      Swal.fire({
+        icon: 'error',
+        title: 'Error en el nombre de usuario',
+        text: 'El nombre de usuario solo puede contener letras, números y guiones bajos, no puntos.'
+      });
+      return; // Detener la ejecución si el username es inválido
+    }
+
     try {
       const response = await axios.post('http://localhost:3000/api/auth/login', formData);
       localStorage.setItem('token', response.data.token);

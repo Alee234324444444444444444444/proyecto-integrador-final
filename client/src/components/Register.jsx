@@ -23,13 +23,47 @@ function Register() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    // Validación de nombre de usuario (una mayúscula, las demás minúsculas y un número al final)
+    const usernameRegex = /^[a-zA-Z0-9_]+$/;
+
+    if (!usernameRegex.test(formData.username)) {
+      Swal.fire({
+        icon: 'error',
+        title: 'Error en el nombre de usuario',
+        text: 'El nombre de usuario solo puede contener letras, números y guiones bajos.'
+      });
+      return; // Detener la ejecución si la validación falla
+    }
     
-    // Validación de contraseñas
+
+    // Validación del correo electrónico
+    const email = formData.email;
+    if (!email.includes('@')) {
+      Swal.fire({
+        icon: 'error',
+        title: 'Error en el correo electrónico',
+        text: 'El correo electrónico debe contener el símbolo "@" y un dominio válido.'
+      });
+      return;
+    }
+
+    const emailRegex = /^[a-z0-9]+@[a-z0-9]+\.[a-z]{2,6}$/; // Correo con dominio simple
+    if (!emailRegex.test(email)) {
+      Swal.fire({
+        icon: 'error',
+        title: 'Correo electrónico inválido',
+        text: 'El correo electrónico no tiene un formato válido. Asegúrate de que esté en minúsculas y tenga un dominio adecuado, como "ejemplo@dominio.com".'
+      });
+      return;
+    }
+
+    // Validación de contraseñas coincidentes
     if (formData.password !== formData.confirmPassword) {
       Swal.fire({
         icon: 'error',
-        title: 'Error',
-        text: 'Las contraseñas no coinciden'
+        title: 'Las contraseñas no coinciden',
+        text: 'Las contraseñas que ingresaste no coinciden. Por favor, vuelve a escribirlas.'
       });
       return;
     }
@@ -56,11 +90,20 @@ function Register() {
       }
     } catch (error) {
       console.error('Error en registro:', error);
-      Swal.fire({
-        icon: 'error',
-        title: 'Error en el registro',
-        text: error.response?.data?.message || 'Error al registrar usuario'
-      });
+      // Mensaje detallado si la respuesta del servidor es un error
+      if (error.response) {
+        Swal.fire({
+          icon: 'error',
+          title: 'Error en el registro',
+          text: error.response.data?.message || 'Hubo un problema al registrar el usuario. Esto podría deberse a problemas con el servidor o datos incorrectos enviados. Por favor, inténtalo de nuevo.'
+        });
+      } else {
+        Swal.fire({
+          icon: 'error',
+          title: 'Error en el registro',
+          text: 'Hubo un problema al intentar conectar con el servidor. Esto podría ser debido a problemas de red o a un servicio caído. Verifica tu conexión a internet y vuelve a intentarlo.'
+        });
+      }
     }
   };
 
