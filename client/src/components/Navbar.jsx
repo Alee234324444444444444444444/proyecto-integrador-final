@@ -30,7 +30,7 @@ function Navbar() {
         {isAuthenticated &&(
           <>
           <li><Link to="/reports">Rankings</Link></li>
-          <li><Link to="/perfil">Perfil</Link></li>
+          <li><Link to="/api/perfil">Perfil</Link></li>
           </>
         )}
       </ul>

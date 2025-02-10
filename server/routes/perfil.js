@@ -1,14 +1,20 @@
 const express = require('express');
 const router = express.Router();
-const sequelize = require('../config/database');  // Importa la configuración de la base de datos
+const { sequelize } = require('../models');
+const auth = require('../middleware/auth');
 
-// Ruta para obtener el reporte de perfil de usuario
-router.get('/', async (req, res) => {
+router.get('/', auth, async (req, res) => {
+
+  
   try {
-    // Ejecuta la consulta SQL directamente a la vista 'user_profile'
-    const [results, metadata] = await sequelize.query('SELECT * FROM user_profile');
+    const [results] = await sequelize.query(
+      'SELECT * FROM user_profile WHERE user_id = :userId',);
 
-    // Envía los resultados en formato JSON
+    if (!results || results.length === 0) {
+      console.log('No se encontraron resultados para el userId:', req.userId);
+      return res.status(404).json({ message: 'Usuario no encontrado' });
+    }
+
     res.json(results);
   } catch (error) {
     console.error('Error al obtener el perfil:', error);

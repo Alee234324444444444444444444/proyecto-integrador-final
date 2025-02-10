@@ -38,7 +38,7 @@ function App() {
               <Posts />
               <Forum />
             </>} />
-            <Route path="/perfil" element={<Perfil/>} />
+            <Route path="/api/perfil" element={<Perfil/>} />
         </Routes>
       </Router>
     </AuthProvider>
