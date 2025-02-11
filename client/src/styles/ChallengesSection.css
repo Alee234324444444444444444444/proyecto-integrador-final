@@ -1,59 +1,27 @@
 .challenges-container {
-  margin: 20px auto;
-  padding: 15px;
-  background-color: #2d4459;
-  color: #f0f4f8;
+  background-color: #0D0D0D;
+  color: #DFFFD6;
   border-radius: 15px;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
   text-align: center;
   width: 90%;
-  margin-bottom: 3em;
-  border: 1px solid white;
-}
-
-.challenges-container ul {
-  list-style: none;
-  padding: 0;
-  margin: 0;
+  margin: 20px auto 3em auto;
+  padding: 15px;
+  border: 2px solid #2E8B57;
 }
 
 .challenges-container li {
-  background-color: #426a8c;
-  margin: 10px 0;
-  padding: 10px;
-  border-radius: 10px;
-  border: 1px solid #f9fafb;
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: space-between;
-  align-items: center;
+  background-color: #183D2D;
+  border: 1px solid #A1D884;
 }
 
 .challenges-container button {
-  background-color: #151d26;
+  background-color: #2E8B57;
   color: white;
-  font-weight: 600;
-  padding: 8px 12px;
   border-radius: 10px;
-  cursor: pointer;
-  transition: background-color 0.3s;
-  width: 100%;
-  max-width: 150px;
-  border: 1px solid #f0f4f8;
-  transition: transform 0.5s ease-in-out, 
-    background-color 0.3s ease-in-out;
 }
 
 .challenges-container button:hover {
-  background-color: #f9fafb;
-  color: #151d26;
-  transform: translateX(-20px);
-  border: 1px solid #151d26;
-}
-
-/* Media Queries */
-@media (max-width: 768px) {
-  .challenges-container {
-    width: 100%;
-  }
+  background-color: #A1D884;
+  color: #0D0D0D;
 }
