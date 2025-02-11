@@ -3,7 +3,7 @@
   background-color: rgba(0, 0, 0, 0.4); 
   color: white; 
   padding: 1rem 2rem; 
-  position: fixed; 
+  position: static; 
   top: 0;
   left: 0;
   right: 0;

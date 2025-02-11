@@ -8,9 +8,10 @@
   min-height: 70vh;
   max-width: 1200px;
   margin: auto;
-  background: linear-gradient(135deg, #0D0D0D  , #A1D884  ); /* Fondo degradado */
+  background-image: url(../images/context.jpg); /* Fondo degradado */
   backdrop-filter: blur(12px);
   border-radius: 15px;
+  border: solid 1px rgba(255, 255, 255, 0.8);;
   box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
 }
 
