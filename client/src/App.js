@@ -30,7 +30,7 @@ function App() {
               <Header />
               <ContextPage />
               <CharacterCanvas />
-              <ChallengesSection />
+              <ChallengesSection /> 
               <Footerpages />
               
               

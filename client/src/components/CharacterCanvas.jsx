@@ -4,7 +4,7 @@ import { useAuth } from '../context/AuthContext';
 import Swal from 'sweetalert2';
 import '../styles/CharacterCanvas.css';
 import spriteSheetPath from '../images/spritesheet.png';
-import backgroundImagePath from '../images/background.jpg';
+import backgroundImagePath from '../images/caracterfound.jpg';
 
 const REWARD_CONFIGS = {
   'hat': {

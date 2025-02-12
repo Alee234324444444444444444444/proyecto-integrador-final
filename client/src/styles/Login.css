@@ -13,13 +13,13 @@
   
   .login-box h2 {
     text-align: center;
-    color: #151d26;
+    color: white;
     margin-bottom: 20px;
     font-size: 40px;
   }
   
   form {
-    background-color: #151d26;
+    backdrop-filter: blur(4px);
     padding: 30px;
     border-radius: 20px;
     width: 100%;
@@ -36,7 +36,7 @@
   }
   
   .input-group label {
-    color: white;
+    color: rgb(255, 255, 255);
     font-weight: 600;
     margin-bottom: 5px;
     display: block;
@@ -44,7 +44,7 @@
   }
   
   .input-group input {
-    background-color: #304d73;
+    background-color: #ffffff;
     color: white;
     padding: 10px;
     border: 1px solid #ccc;
@@ -63,7 +63,7 @@
   
   .submit-btn,
   .cancel-btn {
-    background-color: #81231e;
+    background-color: #151d26;
     color: white;
     padding: 10px;
     border: none;
@@ -93,18 +93,18 @@
 
   .register-link {
     margin-top: 20px;
-    color: #151d26;
+    color: #000000;
     font-size: 1em;
   }
   
   .register-link a {
-    color: #81231e;
+    color: #ffffff;
     text-decoration: none;
     font-weight: bold;
   }
   
   .register-link a:hover {
-    color: #a66414;
+    color: #000000;
   }
 
   .social-login {
@@ -120,7 +120,7 @@
     width: 100%;
     max-width: 360px;
     padding: 10px;
-    background-color: #DFFFD6;
+    background-color: #ffffff;
     color: #000000;
     border: 1px solid #ccc;
     border-radius: 15px;
@@ -136,6 +136,6 @@
   }
   
   .google-btn:hover {
-    background-color: #a66414;
-    color: #f5f5f5;
+    background-color: #302f2d;
+    color: #ffffff;
   }

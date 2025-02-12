@@ -1,11 +1,10 @@
 /* Encabezado */
 .header-content {
-  color: #DFFFD6;
-  height: 25em;
+  color: #000000;
+  height: 45em;
   text-align: center;
-  
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-  background-image: url('../assets/fondo.jpg');
+  background-image: url('../images/header.gif');
   background-size: cover;
   background-position: center;
   display: flex;

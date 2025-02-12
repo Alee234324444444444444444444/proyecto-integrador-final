@@ -5,7 +5,11 @@ body {
     margin: 0;
     padding: 0;
     color: #333;
-    background-image: url(../images/context.jpg) ;
+    background-image: url(../images/background.jpg) ;
+    background-size: cover; /* Hace que la imagen cubra todo el fondo sin repetirse */
+    background-position: center; /* Centra la imagen */
+    background-repeat: no-repeat; /* Evita que la imagen se repita */
+    background-attachment: fixed;
   }
   
   a {

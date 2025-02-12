@@ -3,10 +3,11 @@
   background-color: rgba(0, 0, 0, 0.4); 
   color: white; 
   padding: 1rem 2rem; 
-  position: static; 
+  position: top; 
   top: 0;
   left: 0;
   right: 0;
+  width: 95%;
   z-index: 1000; 
   backdrop-filter: blur(10px); 
   display: flex;

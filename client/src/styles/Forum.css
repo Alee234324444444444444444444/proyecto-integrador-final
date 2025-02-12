@@ -1,5 +1,6 @@
 .foro {
-  background-color: #2d4459;
+  backdrop-filter: blur(5px); 
+  background-color: transparent;
   border-radius: 20px;
   padding: 20px;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
@@ -19,8 +20,8 @@
 
 .foro-textarea {
   width: 98%;
-  color: #151d26;
-  background-color: #f9fafb;
+  color: #ffffff;
+  background-color: rgba(255, 255, 255, 0.1);
   border: 1px solid #f9fafb;
   border-radius: 20px;
   font-size: 1em;
@@ -31,7 +32,7 @@
 }
 
 .btn-publicar {
-  background-color: #151d26;
+  background-color: #181818;
   color: #f9fafb;
   font-weight: 600;
   padding: 10px 20px;
@@ -44,7 +45,7 @@
   min-width: 120px;
   border: 1px solid #f9fafb;
   transition: transform 0.4s ease-in-out, 
-    background-color 0.3s ease-in-out;
+  background-color 0.3s ease-in-out;
 }
 
 .btn-publicar:hover {
@@ -62,7 +63,7 @@
 }
 
 .comentario-box {
-  background-color: #426a8c;
+  background-color: #000000;
   padding: 15px;
   border-radius: 8px;
   color: #f9fafb;
@@ -136,8 +137,8 @@
 }
 
 .edit-textarea {
-  width: 100%;
-  background-color: rgba(255, 255, 255, 0.1);
+  width: 98%;
+  background-color: rgba(46, 46, 46, 0.1);
   color: #f9fafb;
   border: 1px solid #f9fafb;
   border-radius: 8px;
@@ -202,7 +203,7 @@
 
 /* Estilos para el text-area de respuestas */
 .reply-box textarea {
-  width: 100%;
+  width: 98%;
   color: #f9fafb;
   background-color: rgba(255, 255, 255, 0.1);
   border: 1px solid #f9fafb;
@@ -266,7 +267,6 @@
 /* Asegurar que los textareas tengan el mismo estilo */
 .edit-textarea,
 .reply-box textarea {
-  width: 100%;
   background-color: rgba(255, 255, 255, 0.1);
   color: #f9fafb;
   border: 1px solid #f9fafb;
