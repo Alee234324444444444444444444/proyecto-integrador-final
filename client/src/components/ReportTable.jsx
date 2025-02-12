@@ -9,6 +9,16 @@ const Reports = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
+  const labels = [
+    "ID",
+    "Nombre",
+    "Username",
+    "Email",
+    "Comentarios",
+    "Respuestas",
+    "Últimos Comentarios"
+  ];
+
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -16,9 +26,8 @@ const Reports = () => {
         const response = await axios.get(`${BASE}/reports`);
         const formattedData = response.data.map(user => ({
           ...user,
-          // Asegurarse de que last_three_comments sea legible
-          last_three_comments: Array.isArray(user.last_three_comments) 
-            ? user.last_three_comments.join('\n') 
+          last_three_comments: Array.isArray(user.last_three_comments)
+            ? user.last_three_comments.join('\n')
             : user.last_three_comments
         }));
         setUserData(formattedData);
@@ -54,40 +63,38 @@ const Reports = () => {
   return (
     <div className='ranking-container'>
       <h2>Ranking de Comentarios</h2>
-      <table className="table">
-        <thead>
-          <tr>
-            <th>Usuario</th>
-            <th>Nombre</th>
-            <th>Username</th>
-            <th>Email</th>
-            <th>Comentarios</th>
-            <th>Respuestas</th>
-            <th>Últimos Comentarios</th>
-          </tr>
-        </thead>
-        <tbody>
+      <div className="ranking-grid">
+        {/* Columna de etiquetas */}
+        <div className="labels-column">
+          {labels.map((label, index) => (
+            <div key={index} className="label-item">
+              {label}
+            </div>
+          ))}
+        </div>
+
+        {/* Columna de datos de usuarios */}
+        <div className="data-columns">
           {userData.length > 0 ? (
-            userData.map(user => (
-              <tr key={user.id}>
-                <td data-label="Usuario">{user.id}</td>
-                <td data-label="Nombre">{user.name || 'N/A'}</td>
-                <td data-label="Username">{user.username || 'N/A'}</td>
-                <td data-label="Email">{user.email || 'N/A'}</td>
-                <td data-label="Comentarios">{user.total_comments || '0'}</td>
-                <td data-label="Respuestas">{user.total_responses || '0'}</td>
-                <td data-label="Últimos Comentarios">
+            userData.map((user, userIndex) => (
+              <div key={user.id} className="user-data-column">
+                <div className="user-header">OP</div>
+                <div className="data-item">{user.id}</div>
+                <div className="data-item">{user.name || 'N/A'}</div>
+                <div className="data-item">{user.username || 'N/A'}</div>
+                <div className="data-item">{user.email || 'N/A'}</div>
+                <div className="data-item">{user.total_comments || '0'}</div>
+                <div className="data-item">{user.total_responses || '0'}</div>
+                <div className="data-item comments">
                   {user.last_three_comments || 'Sin comentarios recientes'}
-                </td>
-              </tr>
+                </div>
+              </div>
             ))
           ) : (
-            <tr className="empty-row">
-              <td colSpan="7">No hay datos disponibles</td>
-            </tr>
+            <div className="empty-state">No hay datos disponibles</div>
           )}
-        </tbody>
-      </table>
+        </div>
+      </div>
     </div>
   );
 };

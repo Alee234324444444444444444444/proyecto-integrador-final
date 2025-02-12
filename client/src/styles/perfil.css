@@ -1,186 +1,170 @@
-/* Contenedor principal */
-.perfil-container.ranking-container {
-    backdrop-filter: blur(10px); 
-    border: 1px solid #DFFFD6;
+.perfil-container {
+    backdrop-filter: blur(10px);
     border-radius: 15px;
-    padding: 15px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    padding: 30px;
+    border: 2px solid #ffffff;
     margin: 20px auto;
-    margin-top: 2em;
+    margin-top: 5em;
     width: 90%;
-    max-width: 1000px;
+    max-width: 1200px;
     color: #ffffff;
-    font-size: 3rem;
-}
-
-/* Títulos principales */
-.perfil-container.ranking-container h1 {
+    background-color: rgba(0, 0, 0, 0.4);
+  }
+  
+  .perfil-container h2 {
+    text-transform: uppercase;
     text-align: center;
     color: #ffffff;
-    margin-bottom: 15px;
-    font-size: 2rem;
-}
-
-.perfil-container.ranking-container h2 {
-    text-align: center;
+    margin-bottom: 30px;
+    font-size: 1.8rem;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+  }
+  
+  .perfil-container h3 {
     color: #ffffff;
-    margin-bottom: 15px;
-    font-size: 2rem;
-}
-
-/* Estilo para los párrafos */
-.perfil-container.ranking-container p {
-    font-size: 1rem;
-    line-height: 1.5;
-    margin-bottom: 8px;
-}
-
-/* Estilo para los encabezados de secciones */
-.perfil-container.ranking-container strong {
-    font-weight: 600;
-}
-
-/* Tabla de estadísticas */
-.table-wrapper {
-    overflow-x: auto;
-    margin-top: 10px;
-}
-
-.table {
-    width: 100%;
-    border-collapse: separate;
-    border-spacing: 0;
-    border-radius: 8px;
-    overflow: hidden;
+    text-align: center;
+    margin-bottom: 20px;
+    font-size: 1.4rem;
+    text-transform: uppercase;
+  }
+  
+  .profile-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+  }
+  
+  .info-section {
+    background-color: rgba(0, 0, 0, 0.3);
+    border-radius: 12px;
+    padding: 20px;
+    border: 1px solid #ffffff;
+  }
+  
+  .data-grid {
+    display: flex;
+    gap: 20px;
+  }
+  
+  .labels-column {
+    flex: 0 0 200px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  
+  .values-column {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  
+  .label-item {
+    padding: 12px 15px;
+    color: #ffffff;
+    font-weight: bold;
+    text-transform: uppercase;
     font-size: 0.9rem;
-    table-layout: fixed; /* Añadido para control preciso del ancho */
-}
-
-/* Definir anchos específicos para cada columna */
-.table th:nth-child(1),
-.table td:nth-child(1) { /* Usuario ID */
-    width: 8%;
-}
-
-.table th:nth-child(2),
-.table td:nth-child(2) { /* Nombre */
-    width: 15%;
-}
-
-.table th:nth-child(3),
-.table td:nth-child(3) { /* Nombre de usuario */
-    width: 12%;
-}
-
-.table th:nth-child(4),
-.table td:nth-child(4) { /* Email */
-    width: 18%;
-}
-
-.table th:nth-child(5),
-.table td:nth-child(5) { /* Comentarios Totales */
-    width: 12%;
-}
-
-.table th:nth-child(6),
-.table td:nth-child(6) { /* Respuestas Totales */
-    width: 12%;
-}
-
-.table th:nth-child(7),
-.table td:nth-child(7) { /* Últimos Comentarios */
-    width: 13%;
-}
-
-.table th:nth-child(8),
-.table td:nth-child(8) { /* Fecha Último Comentario */
-    width: 10%;
-}
-
-/* Manejo de texto largo */
-.table td {
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    padding: 8px 10px;
-    border: 1px solid rgba(249, 250, 251, 0.1);
-}
-
-.table thead {
-    background-color: #426a8c;
-}
-
-.table th {
-    padding: 10px;
-    text-align: left;
-    font-weight: 600;
-    border: 1px solid #151d26;
-    border-bottom: 2px solid #151d26;
-    white-space: nowrap;
-}
-
-.table tbody tr:hover {
+    letter-spacing: 0.5px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+    background-color: rgba(255, 255, 255, 0.1);
+    border-radius: 6px;
+  }
+  
+  .data-item {
+    padding: 12px 15px;
+    color: #ffffff;
+    font-size: 0.95rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.2);
     background-color: rgba(255, 255, 255, 0.05);
-}
-
-/* Estilo para la primera columna */
-.table th:first-child,
-.table td:first-child {
-    background-color: rgba(0, 0, 0, 0.1);
-}
-
-/* Estilos Responsivos */
-@media screen and (max-width: 1200px) {
-    .perfil-container.ranking-container {
-        width: 95%;
-    }
-}
-
-@media screen and (max-width: 768px) {
-    .perfil-container.ranking-container {
-        padding: 12px;
-        width: 98%;
-    }
-
-    .table {
-        font-size: 0.85rem;
-    }
-
-    .table th,
-    .table td {
-        padding: 6px 8px;
-    }
-}
-
-@media screen and (max-width: 480px) {
-    .perfil-container.ranking-container {
-        width: 90%;
-        padding: 8px;
-    }
-
-    .table {
-        font-size: 0.8rem;
-    }
-
-    .table th,
-    .table td {
-        padding: 4px 6px;
-    }
-}
-
-/* Estado vacío para la tabla */
-.table tbody tr.empty-row td {
+    border-radius: 6px;
+    word-break: break-word;
+  }
+  
+  .loading, .error {
     text-align: center;
-    padding: 15px;
-    color: #ccc;
-}
-
-/* Líneas de la tabla */
-.table th:not(:last-child),
-.table td:not(:last-child) {
-    border-right: 1px solid rgba(249, 250, 251, 0.1);
-}
-
-.table tbody tr:not(:last-child) td {
-    border-bottom: 1px solid rgba(249, 250, 251, 0.1);
-}
+    padding: 20px;
+    color: #ffffff;
+    background-color: rgba(0, 0, 0, 0.6);
+    border-radius: 10px;
+    border: 1px solid #ffffff;
+    font-size: 1.1rem;
+  }
+  
+  .error {
+    color: #ff6b6b;
+  }
+  
+  /* Responsive styles */
+  @media screen and (max-width: 768px) {
+    .perfil-container {
+      width: 95%;
+      padding: 20px;
+      margin-top: 4em;
+    }
+  
+    .data-grid {
+      flex-direction: column;
+    }
+  
+    .labels-column {
+      flex: none;
+      width: 90%;
+    }
+  
+    .values-column {
+      width: 100%;
+    }
+  
+    .label-item, .data-item {
+      padding: 10px;
+      font-size: 0.85rem;
+    }
+  
+    .perfil-container h2 {
+      font-size: 1.5rem;
+    }
+  
+    .perfil-container h3 {
+      font-size: 1.2rem;
+    }
+  }
+  
+  @media screen and (max-width: 480px) {
+    .perfil-container {
+      width: 100%;
+      padding: 15px;
+      margin-top: 3em;
+    }
+  
+    .info-section {
+      padding: 15px;
+    }
+  
+    .label-item, .data-item {
+      padding: 8px;
+      font-size: 0.8rem;
+    }
+  
+    .perfil-container h2 {
+      font-size: 1.3rem;
+      margin-bottom: 20px;
+    }
+  
+    .perfil-container h3 {
+      font-size: 1.1rem;
+      margin-bottom: 15px;
+    }
+  }
+  
+  /* Hover effects */
+  .data-item:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+    transition: background-color 0.3s ease;
+  }
+  
+  .label-item:hover {
+    background-color: rgba(255, 255, 255, 0.15);
+    transition: background-color 0.3s ease;
+  }
