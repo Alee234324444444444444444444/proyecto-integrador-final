@@ -1,200 +1,174 @@
 .ranking-container {
   backdrop-filter: blur(10px);
   border-radius: 15px;
-  padding: 15px;
-  border: 1px solid #DFFFD6;
+  padding: 20px;
+  border: 1px solid white;
   margin: 20px auto;
   margin-top: 5em;
-  width: 80%;
-  max-width: 2000px;
+  width: 90%;
+  max-width: 1400px;
   color: #151d26;
+  background-color: rgba(0, 0, 0, 0.4);
 }
 
 .ranking-container h2 {
   text-transform: uppercase;
   text-align: center;
   color: #ffffff;
-  margin-bottom: 15px;
+  margin-bottom: 25px;
   font-size: 1.3rem;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
 }
 
-.table-wrapper {
-  overflow-x: auto;
-  margin-top: 10px;
+.ranking-grid {
+  display: flex;
+  gap: 20px;
+  min-height: 400px;
 }
 
-.table {
-  width: 100%;
-  border-collapse: separate;
-  border-spacing: 0;
-  border-radius: 8px;
-  overflow: hidden;
-  font-size: 0.9rem;
-  table-layout: fixed;
+/* Columna de etiquetas */
+.labels-column {
+  flex: 0 0 200px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 15px;
+  background-color: rgba(0, 0, 0, 0.6);
+  border-radius: 10px;
+  border: 1px solid #ffffff;
 }
 
-.table td {
-  white-space: normal; 
-  word-wrap: break-word; 
-  overflow: visible;
-  padding: 8px 10px;
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  vertical-align: top; 
-  min-height: 50px; 
-  height: auto; 
-}
-
-/* Anchos de columnas */
-.table th:nth-child(1),
-.table td:nth-child(1) { /* Usuario ID */
-  width: 8%;
-  border: 1px solid #DFFFD6;
-  color: white;
-}
-
-.table th:nth-child(2),
-.table td:nth-child(2) { /* Nombre */
-  width: 15%;
-  border: 1px solid #DFFFD6;
-  color: white;
-}
-
-.table th:nth-child(3),
-.table td:nth-child(3) { /* Username */
-  width: 12%;
-  border: 1px solid #DFFFD6;
-  color: white;
-}
-
-.table th:nth-child(4),
-.table td:nth-child(4) { /* Email */
-  width: 18%;
-  border: 1px solid #DFFFD6;
-  color: white;
-}
-
-.table th:nth-child(5),
-.table td:nth-child(5) { /* Comentarios Totales */
-  width: 12%;
-  border: 1px solid #DFFFD6;
-  color: white;
-}
-
-.table th:nth-child(6),
-.table td:nth-child(6) { /* Respuestas Totales */
-  width: 12%;
-  border: 1px solid #DFFFD6;
-  color: white;
-}
-
-.table th:nth-child(7),
-.table td:nth-child(7) { /* Últimos Comentarios */
-  width: 23%; /* Aumentado para dar más espacio */
-  border: 1px solid #DFFFD6;
-  color: white;
-}
-
-.table thead {
-  background-color: #000000;
-}
-
-.table th {
+.label-item {
+  padding: 12px 15px;
+  color: #ffffff;
+  font-weight: bold;
   text-transform: uppercase;
-  padding: 10px;
-  text-align: left;
-  font-weight: 600;
-  border: 1px solid #151d26;
-  border-bottom: 2px solid #151d26;
-  white-space: nowrap;
+  font-size: 0.9rem;
+  letter-spacing: 0.5px;
+  border-bottom: 1px solid white;
+}
+
+/* Columna de datos */
+.data-columns {
+  flex: 1;
+  display: flex;
+  gap: 15px;
+  overflow-x: auto;
+  padding-bottom: 10px;
+}
+
+.user-data-column {
+  flex: 0 0 250px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  background-color: rgba(0, 0, 0, 0.6);
+  border-radius: 10px;
+  border: 1px solid #ffffff;
+  padding: 15px;
+}
+
+.user-header {
+  text-align: center;
+  color: #ffffff;
+  font-weight: bold;
+  padding: 8px;
+  border-bottom: 3px solid #ffffff;
+  margin-bottom: 5px;
+  text-transform: uppercase;
+  font-size: 1rem;
+}
+
+.data-item {
+  padding: 12px 15px;
   color: white;
+  border-bottom: 1px solid white;
+  word-break: break-word;
+  font-size: 0.9rem;
 }
 
-.table tbody tr:hover {
-  background-color: rgba(255, 255, 255, 0.05);
+.data-item.comments {
+  white-space: pre-wrap;
+  min-height: 100px;
 }
 
-/* First column styling */
-.table th:first-child,
-.table td:first-child {
-  background-color: rgba(0, 0, 0, 0.1);
+.empty-state {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #ffffff;
+  font-style: italic;
+  padding: 20px;
+  background-color: rgba(0, 0, 0, 0.6);
+  border-radius: 10px;
+  border: 1px solid #ffffff;
+}
+
+.loading, .error {
+  text-align: center;
+  padding: 20px;
+  color: #ffffff;
+  background-color: rgba(0, 0, 0, 0.6);
+  border-radius: 10px;
+  border: 1px solid #ffffff;
 }
 
 /* Responsive styles */
-@media screen and (max-width: 1200px) {
+@media screen and (max-width: 1024px) {
   .ranking-container {
     width: 95%;
+    padding: 15px;
+  }
+
+  .user-data-column {
+    flex: 0 0 220px;
   }
 }
 
 @media screen and (max-width: 768px) {
-  .ranking-container {
-    padding: 12px;
-    width: 98%;
+  .ranking-grid {
+    flex-direction: column;
   }
 
-  .table {
-    font-size: 0.85rem;
+  .labels-column {
+    flex: none;
+    width: 90%;
   }
 
-  /* Cambiar a diseño vertical en móviles */
-  .table thead {
-    display: none;
+  .data-columns {
+    flex-direction: column;
+    overflow-x: visible;
   }
 
-  .table, .table tbody, .table tr, .table td {
-    display: block;
-    width: 100%;
+  .user-data-column {
+    flex: none;
+    width: 90%;
   }
 
-  .table tr {
-    margin-bottom: 15px;
-    border: 1px solid #DFFFD6;
+  .data-item {
+    position: relative;
+    padding-left: 120px;
   }
 
-  .table td {
-    padding: 10px;
-    border: none;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-  }
-
-  .table td::before {
+  .data-item::before {
     content: attr(data-label);
+    position: absolute;
+    left: 15px;
     font-weight: bold;
-    display: block;
-    margin-bottom: 5px;
     color: #DFFFD6;
-  }
-
-  .table td:last-child {
-    border-bottom: none;
   }
 }
 
 @media screen and (max-width: 480px) {
   .ranking-container {
     width: 90%;
-    padding: 8px;
+    padding: 10px;
+    margin-top: 3em;
   }
 
-  .table {
-    font-size: 0.8rem;
+  .label-item, .data-item {
+    font-size: 0.85rem;
+    padding: 10px;
   }
-
-}
-
-/* Empty state */
-.table tbody tr.empty-row td {
-  text-align: center;
-  padding: 15px;
-  color: #ccc;
-}
-
-/* Grid lines */
-.table th:not(:last-child),
-.table td:not(:last-child) {
-  border-right: 1px solid rgba(249, 250, 251, 0.1);
-}
-
-.table tbody tr:not(:last-child) td {
-  border-bottom: 1px solid rgba(249, 250, 251, 0.1);
 }

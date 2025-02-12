@@ -9,6 +9,20 @@ function Perfil() {
   const [error, setError] = useState(null);
   const { user, isAuthenticated } = useAuth();
 
+  const profileLabels = [
+    { label: "Nombre completo", key: "full_name" },
+    { label: "Usuario", key: "username" },
+    { label: "Email", key: "email" },
+    { label: "Personaje", key: "character_name" }
+  ];
+
+  const statsLabels = [
+    { label: "Total de publicaciones", key: "total_posts" },
+    { label: "Total de comentarios", key: "total_comments" },
+    { label: "Total de retos", key: "total_challenges" },
+    { label: "Recompensas equipadas", key: "rewards_earned" }
+  ];
+
   useEffect(() => {
     if (isAuthenticated && user) {
       fetchUserProfile();
@@ -18,14 +32,11 @@ function Perfil() {
   const fetchUserProfile = async () => {
     try {
       const token = localStorage.getItem('token');
-
       if (!token) {
         setError('No hay token disponible. Inicia sesión nuevamente.');
         setLoading(false);
         return;
       }
-
-      console.log("Token enviado desde el frontend:", token);
 
       const response = await axios.get('http://localhost:3000/api/perfil', {
         headers: {
@@ -34,48 +45,60 @@ function Perfil() {
         }
       });
 
-      console.log("Respuesta del backend:", response.data);
       setUserProfile(response.data);
     } catch (error) {
       console.error('Error fetching profile:', error);
-
-      if (error.response) {
-        setError(error.response.data.message || 'Error al cargar el perfil');
-      } else {
-        setError('No se pudo conectar con el servidor.');
-      }
+      setError(error.response?.data?.message || 'Error al cargar el perfil');
     } finally {
       setLoading(false);
     }
   };
 
-  if (loading) return <p>Cargando perfil...</p>;
-  if (error) return <p>{error}</p>;
-  if (!userProfile) return <p>No se encontró el usuario.</p>;
-
-  const {
-    full_name,
-    username,
-    email,
-    character_name,
-    total_posts,
-    total_comments,
-    total_challenges,
-    rewards_earned
-  } = userProfile;
+  if (loading) return <div className="perfil-container"><div className="loading">Cargando perfil...</div></div>;
+  if (error) return <div className="perfil-container"><div className="error">{error}</div></div>;
+  if (!userProfile) return <div className="perfil-container"><div className="error">No se encontró el usuario.</div></div>;
 
   return (
-    <div className="perfil-container ranking-container">
-      <h1>{full_name}</h1>
-      <p><strong>Usuario:</strong> {username}</p>
-      <p><strong>Email:</strong> {email}</p>
-      <p><strong>Personaje:</strong> {character_name || 'No asignado'}</p>
+    <div className="perfil-container">
+      <h2>Perfil de Usuario</h2>
       
-      <h2>Estadísticas</h2>
-      <p><strong>Total de publicaciones:</strong> {total_posts || 0}</p>
-      <p><strong>Total de comentarios:</strong> {total_comments || 0}</p>
-      <p><strong>Total de retos:</strong> {total_challenges || 0}</p>
-      <p><strong>Recompensas equipadas:</strong> {rewards_earned || 'Ninguna'}</p>
+      <div className="profile-grid">
+        {/* Información Personal */}
+        <div className="info-section">
+          <h3>Información Personal</h3>
+          <div className="data-grid">
+            <div className="labels-column">
+              {profileLabels.map(item => (
+                <div key={item.key} className="label-item">{item.label}</div>
+              ))}
+            </div>
+            <div className="values-column">
+              <div className="data-item">{userProfile.full_name || 'N/A'}</div>
+              <div className="data-item">{userProfile.username || 'N/A'}</div>
+              <div className="data-item">{userProfile.email || 'N/A'}</div>
+              <div className="data-item">{userProfile.character_name || 'No asignado'}</div>
+            </div>
+          </div>
+        </div>
+
+        {/* Estadísticas */}
+        <div className="info-section">
+          <h3>Estadísticas</h3>
+          <div className="data-grid">
+            <div className="labels-column">
+              {statsLabels.map(item => (
+                <div key={item.key} className="label-item">{item.label}</div>
+              ))}
+            </div>
+            <div className="values-column">
+              <div className="data-item">{userProfile.total_posts || '0'}</div>
+              <div className="data-item">{userProfile.total_comments || '0'}</div>
+              <div className="data-item">{userProfile.total_challenges || '0'}</div>
+              <div className="data-item">{userProfile.rewards_earned || 'Ninguna'}</div>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   );
 }
