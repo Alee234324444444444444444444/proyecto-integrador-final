@@ -1,17 +1,16 @@
-/* ChallengesContainer.css */
-
 .challenges-container {
   margin: 20px auto;
+  margin-top: 5em;
   padding: 20px;
   backdrop-filter: blur(12px);
-  color: #333; /* Color de texto más suave y accesible */
-  border-radius: 20px; /* Esquinas más redondeadas */
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1); /* Sombra más suave */
+  color: white;
+  border-radius: 20px; 
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1); 
   text-align: center;
   border: solid 1px rgba(255, 255, 255, 0.8);;
   width: 90%;
-  max-width: 2200px; /* Límite de ancho máximo para un diseño más organizado */
-  transition: background-color 0.3s ease; /* Transición más fluida */
+  max-width: 2200px; 
+  transition: background-color 0.3s ease;
 }
 
 .challenges-container ul {
@@ -21,65 +20,76 @@
 }
 
 .challenges-container li {
-  color: #e0e0e0;
+  color: white;
   background-color: #151d26;
   margin: 12px 0;
   padding: 15px;
   border-radius: 12px;
-  border: 1px solid #e0e0e0; /* Bordes más suaves */
+  border: 1px solid white; 
   display: flex;
   flex-wrap: wrap;
   justify-content: space-between;
   align-items: center;
-  transition: transform 0.3s ease, box-shadow 0.3s ease; /* Animación de transformación y sombra */
+  transition: transform 0.3s ease, box-shadow 0.3s ease; 
 }
 
 .challenges-container button {
-  background-color: #290a0a; /* Color más vibrante para el botón */
-  color: white;
+  background-color: #bdd3ce;
+  color: #151d26;
+  border: 1px solid white;
   font-weight: 600;
   padding: 10px 20px;
-  border-radius: 12px; /* Esquinas más redondeadas */
+  border-radius: 12px; 
   cursor: pointer;
   transition: background-color 0.3s ease, transform 0.3s ease;
   width: 100%;
-  max-width: 180px; /* Asegura un tamaño de botón adecuado */
+  max-width: 180px; 
 }
 
 .challenges-container button:hover {
-  color: #333;
-  background-color: #dfdfdf; /* Color de hover más distintivo */
-  transform: translateY(-3px); /* Efecto de desplazamiento al pasar el mouse */
+  transform: translateX(-15px);
 }
 
 .challenges-container button:active {
-  transform: translateY(1px); /* Efecto visual cuando se presiona el botón */
+  transform: translateY(1px);
 }
 
 /* Media Queries */
 @media (max-width: 768px) {
   .challenges-container {
-    width: 95%; /* Ajuste en dispositivos pequeños */
+    width: 95%;
     padding: 15px;
   }
 
   .challenges-container li {
-    flex-direction: column; /* Cambiar la dirección del contenido a columna en pantallas pequeñas */
-    align-items: flex-start; /* Alinear los elementos al inicio */
+    flex-direction: column; 
+    align-items: flex-start; 
   }
 
   .challenges-container button {
-    width: auto; /* Permitir que el botón se ajuste al contenido */
-    max-width: 100%; /* Botón más flexible */
+    width: auto; 
+    max-width: 100%; 
   }
 }
 
 @media (max-width: 480px) {
   .challenges-container {
-    padding: 10px; /* Menos padding en pantallas pequeñas */
+    padding: 0px; 
   }
 
   .challenges-container li {
-    padding: 12px; /* Ajustar padding para pantallas pequeñas */
+    margin: 10px;
+    padding: 12px; 
+  }
+
+  .challenges-container button {
+    width: auto; 
+    max-width: 90%; 
+    padding: 5px 10px;
+    margin-top: 5px;
+  }
+
+  .challenges-container button:hover {
+    transform: translateX(-5px);
   }
 }

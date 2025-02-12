@@ -91,7 +91,7 @@ function CharacterCanvas() {
         // Esperar a que la imagen se cargue
         await new Promise((resolve) => {
           rewardImage.onload = resolve;
-          rewardImage.onerror = resolve; // Por si hay error en la carga
+          rewardImage.onerror = resolve; 
         });
         
         // Inicializar frames si es una recompensa animada
@@ -300,7 +300,7 @@ function CharacterCanvas() {
   return (
     <div className="character-container">
       <div className="sidebar">
-        <h3>Recompensas Desbloqueadas</h3>
+        <h3>RECOMPENSAS DESBLOQUEADAS</h3>
         {unlockedRewards.map(reward => (
           <div key={reward.id} className="reward-item">
             <p>{reward.name}</p>

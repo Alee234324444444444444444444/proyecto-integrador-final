@@ -7,7 +7,7 @@ function ContextPage() {
       {/* Primera fila: 3 columnas */}
       <div className="row first-row">
         <section className="column intro">
-          <h2>Bienvenidos al Juego de Cuidado de la Naturaleza</h2>
+          <h3>Bienvenidos al Juego de Cuidado de la Naturaleza</h3>
           <p>
             Este juego está diseñado para crear conciencia sobre la importancia de cuidar el medio ambiente. 
             Aquí, podrás aprender sobre prácticas sostenibles y cómo tus decisiones afectan a la naturaleza.
@@ -19,7 +19,7 @@ function ContextPage() {
           <p>
             A través de diferentes desafíos y actividades, podrás tomar decisiones que influirán en la conservación 
             de los ecosistemas dentro del juego. Con cada acción, contribuirás a crear un mundo más verde y saludable.
-            <img src="../images/chest.gif" alt="Animación de naturaleza" className="gif" />
+            {/* <img src="../images/chest.gif" alt="Animación de naturaleza" className="gif" /> */}
           </p>
         </section>
 

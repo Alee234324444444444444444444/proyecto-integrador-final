@@ -6,9 +6,9 @@ body {
     padding: 0;
     color: #333;
     background-image: url(../images/background.jpg) ;
-    background-size: cover; /* Hace que la imagen cubra todo el fondo sin repetirse */
-    background-position: center; /* Centra la imagen */
-    background-repeat: no-repeat; /* Evita que la imagen se repita */
+    background-size: cover;
+    background-position: center; 
+    background-repeat: no-repeat; 
     background-attachment: fixed;
   }
   

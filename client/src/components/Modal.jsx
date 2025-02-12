@@ -104,12 +104,12 @@ function Modal({ showModal, closeModal, challengeId }) {
   return (
     <div className="modal">
       <div className="modal-content">
-        <h2 style={{ textAlign: 'center' }}>Vamos a completar el desafío!</h2>
+        <h2 style={{ textAlign: 'center' }}>VAMOS A COMPLETAR EL DESAFÍO!</h2>
         <p>Sube una foto para demostrarlo.</p>
 
         {error && <p className="error-message" style={{ color: '#ff6b6b' }}>{error}</p>}
         
-        <form onSubmit={handleSubmit}>
+        <form className="form-modal" onSubmit={handleSubmit}>
           <input
             type="file"
             name="photo"

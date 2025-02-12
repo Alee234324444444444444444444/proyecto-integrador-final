@@ -1,179 +1,200 @@
 .ranking-container {
-    backdrop-filter: blur(10px); 
-    border-radius: 15px;
-    padding: 15px;
-    border: 1px solid #DFFFD6;
-    margin: 20px auto;
-    width: 80%;
-    max-width: 2000px;
-    color: #151d26;
+  backdrop-filter: blur(10px);
+  border-radius: 15px;
+  padding: 15px;
+  border: 1px solid #DFFFD6;
+  margin: 20px auto;
+  margin-top: 5em;
+  width: 80%;
+  max-width: 2000px;
+  color: #151d26;
+}
+
+.ranking-container h2 {
+  text-transform: uppercase;
+  text-align: center;
+  color: #ffffff;
+  margin-bottom: 15px;
+  font-size: 1.3rem;
+}
+
+.table-wrapper {
+  overflow-x: auto;
+  margin-top: 10px;
+}
+
+.table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  border-radius: 8px;
+  overflow: hidden;
+  font-size: 0.9rem;
+  table-layout: fixed;
+}
+
+.table td {
+  white-space: normal; 
+  word-wrap: break-word; 
+  overflow: visible;
+  padding: 8px 10px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  vertical-align: top; 
+  min-height: 50px; 
+  height: auto; 
+}
+
+/* Anchos de columnas */
+.table th:nth-child(1),
+.table td:nth-child(1) { /* Usuario ID */
+  width: 8%;
+  border: 1px solid #DFFFD6;
+  color: white;
+}
+
+.table th:nth-child(2),
+.table td:nth-child(2) { /* Nombre */
+  width: 15%;
+  border: 1px solid #DFFFD6;
+  color: white;
+}
+
+.table th:nth-child(3),
+.table td:nth-child(3) { /* Username */
+  width: 12%;
+  border: 1px solid #DFFFD6;
+  color: white;
+}
+
+.table th:nth-child(4),
+.table td:nth-child(4) { /* Email */
+  width: 18%;
+  border: 1px solid #DFFFD6;
+  color: white;
+}
+
+.table th:nth-child(5),
+.table td:nth-child(5) { /* Comentarios Totales */
+  width: 12%;
+  border: 1px solid #DFFFD6;
+  color: white;
+}
+
+.table th:nth-child(6),
+.table td:nth-child(6) { /* Respuestas Totales */
+  width: 12%;
+  border: 1px solid #DFFFD6;
+  color: white;
+}
+
+.table th:nth-child(7),
+.table td:nth-child(7) { /* Últimos Comentarios */
+  width: 23%; /* Aumentado para dar más espacio */
+  border: 1px solid #DFFFD6;
+  color: white;
+}
+
+.table thead {
+  background-color: #000000;
+}
+
+.table th {
+  text-transform: uppercase;
+  padding: 10px;
+  text-align: left;
+  font-weight: 600;
+  border: 1px solid #151d26;
+  border-bottom: 2px solid #151d26;
+  white-space: nowrap;
+  color: white;
+}
+
+.table tbody tr:hover {
+  background-color: rgba(255, 255, 255, 0.05);
+}
+
+/* First column styling */
+.table th:first-child,
+.table td:first-child {
+  background-color: rgba(0, 0, 0, 0.1);
+}
+
+/* Responsive styles */
+@media screen and (max-width: 1200px) {
+  .ranking-container {
+    width: 95%;
   }
-  
-  .ranking-container h2 {
-    text-transform: uppercase;
-    text-align: center;
-    color: #ffffff;
-    margin-bottom: 15px;
-    font-size: 1.3rem;
+}
+
+@media screen and (max-width: 768px) {
+  .ranking-container {
+    padding: 12px;
+    width: 98%;
   }
-  
-  .table-wrapper {
-    overflow-x: auto;
-    margin-top: 10px;
-  }
-  
+
   .table {
-    width: 100%;
-    border-collapse: separate;
-    border-spacing: 0;
-    border-radius: 8px;
-    overflow: hidden;
-    font-size: 0.9rem;
-    table-layout: fixed; /* Añadido para control preciso del ancho */
+    font-size: 0.85rem;
   }
-  
-  /* Definir anchos específicos para cada columna */
-  .table th:nth-child(1), 
-  .table td:nth-child(1) { /* Usuario ID */
-    width: 8%;
-    border: 1px solid #DFFFD6;
-    color: white;
-  }
-  
-  .table th:nth-child(2), 
-  .table td:nth-child(2) { /* Nombre */
-    width: 15%;
-    border: 1px solid #DFFFD6;
-    color: white;
-  }
-  
-  .table th:nth-child(3), 
-  .table td:nth-child(3) { /* Username */
-    width: 12%;
-    border: 1px solid #DFFFD6;
-    color: white;
-  }
-  
-  .table th:nth-child(4), 
-  .table td:nth-child(4) { /* Email */
-    width: 18%;
-    border: 1px solid #DFFFD6;
-    color: white;
-  }
-  
-  .table th:nth-child(5), 
-  .table td:nth-child(5) { /* Comentarios Totales */
-    width: 12%;
-    border: 1px solid #DFFFD6;
-    color: white;
-  }
-  
-  .table th:nth-child(6), 
-  .table td:nth-child(6) { /* Respuestas Totales */
-    width: 12%;
-    border: 1px solid #DFFFD6;
-    color: white;
-  }
-  
-  .table th:nth-child(7), 
-  .table td:nth-child(7) { /* Últimos Comentarios */
-    width: 13%;
-    border: 1px solid #DFFFD6;
-    color: white;
-  }
-  
-  .table th:nth-child(8), 
-  .table td:nth-child(8) { /* Fecha Último Comentario */
-    width: 10%;
-    border: 1px solid #DFFFD6;
-    color: white;
-  }
-  
-  /* Manejo de texto largo */
-  .table td {
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    padding: 8px 10px;
-    border: 1px solid rgba(255, 255, 255, 0.1);
-  }
-  
+
+  /* Cambiar a diseño vertical en móviles */
   .table thead {
-    background-color: #000000;
+    display: none;
   }
-  
-  .table th {
-    text-transform: uppercase;
+
+  .table, .table tbody, .table tr, .table td {
+    display: block;
+    width: 100%;
+  }
+
+  .table tr {
+    margin-bottom: 15px;
+    border: 1px solid #DFFFD6;
+  }
+
+  .table td {
     padding: 10px;
-    text-align: left;
-    font-weight: 600;
-    border: 1px solid #151d26;
-    border-bottom: 2px solid #151d26;
-    white-space: nowrap;
+    border: none;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
   }
-  
-  .table tbody tr:hover {
-    background-color: rgba(255, 255, 255, 0.05);
+
+  .table td::before {
+    content: attr(data-label);
+    font-weight: bold;
+    display: block;
+    margin-bottom: 5px;
+    color: #DFFFD6;
   }
-  
-  /* First column styling */
-  .table th:first-child,
-  .table td:first-child {
-    background-color: rgba(0, 0, 0, 0.1);
+
+  .table td:last-child {
+    border-bottom: none;
   }
-  
-  /* Responsive styles */
-  @media screen and (max-width: 1200px) {
-    .ranking-container {
-      width: 95%;
-    }
+}
+
+@media screen and (max-width: 480px) {
+  .ranking-container {
+    width: 90%;
+    padding: 8px;
   }
-  
-  @media screen and (max-width: 768px) {
-    .ranking-container {
-      padding: 12px;
-      width: 98%;
-    }
-    
-    .table {
-      font-size: 0.85rem;
-    }
-    
-    .table th,
-    .table td {
-      padding: 6px 8px;
-    }
+
+  .table {
+    font-size: 0.8rem;
   }
-  
-  @media screen and (max-width: 480px) {
-    .ranking-container {
-      width: 100%;
-      padding: 8px;
-    }
-    
-    .table {
-      font-size: 0.8rem;
-    }
-    
-    .table th,
-    .table td {
-      padding: 4px 6px;
-    }
-  }
-  
-  /* Empty state */
-  .table tbody tr.empty-row td {
-    text-align: center;
-    padding: 15px;
-    color: #ccc;
-  }
-  
-  /* Grid lines */
-  .table th:not(:last-child),
-  .table td:not(:last-child) {
-    border-right: 1px solid rgba(249, 250, 251, 0.1);
-  }
-  
-  .table tbody tr:not(:last-child) td {
-    border-bottom: 1px solid rgba(249, 250, 251, 0.1);
-  }
+
+}
+
+/* Empty state */
+.table tbody tr.empty-row td {
+  text-align: center;
+  padding: 15px;
+  color: #ccc;
+}
+
+/* Grid lines */
+.table th:not(:last-child),
+.table td:not(:last-child) {
+  border-right: 1px solid rgba(249, 250, 251, 0.1);
+}
+
+.table tbody tr:not(:last-child) td {
+  border-bottom: 1px solid rgba(249, 250, 251, 0.1);
+}

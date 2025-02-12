@@ -113,7 +113,7 @@ function Register() {
         <h2>Registro</h2>
         <form onSubmit={handleSubmit}>
           <div className="input-group">
-            <label htmlFor="name"><big>Nombre Completo:</big></label>
+            <label htmlFor="name"><big>NOMBRE COMPLETO:</big></label>
             <input
               type="text"
               name="name"
@@ -126,7 +126,7 @@ function Register() {
           </div>
 
           <div className="input-group">
-            <label htmlFor="username"><big>Nombre de Usuario:</big></label>
+            <label htmlFor="username"><big>NOMBRE DE USUARIO:</big></label>
             <input
               type="text"
               name="username"
@@ -139,7 +139,7 @@ function Register() {
           </div>
 
           <div className="input-group">
-            <label htmlFor="email"><big>Correo Electrónico:</big></label>
+            <label htmlFor="email"><big>CORREO ELECTRÓNICO:</big></label>
             <input
               type="email"
               name="email"
@@ -152,7 +152,7 @@ function Register() {
           </div>
 
           <div className="input-group">
-            <label htmlFor="password"><big>Contraseña:</big></label>
+            <label htmlFor="password"><big>CONTRASEÑA:</big></label>
             <input
               type="password"
               name="password"
@@ -165,7 +165,7 @@ function Register() {
           </div>
 
           <div className="input-group">
-            <label htmlFor="confirmPassword"><big>Confirmar Contraseña:</big></label>
+            <label htmlFor="confirmPassword"><big>CONFIRMAR CONTRASEÑA:</big></label>
             <input
               type="password"
               name="confirmPassword"

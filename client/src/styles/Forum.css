@@ -5,9 +5,11 @@
   padding: 20px;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
   margin-top: 30px;
+  margin-left: 30px;
   width: 80%;
   margin: 0 auto;
-  max-width: 1200px;
+  margin-bottom: 20px;
+  max-width: 1000px;
   border: 1px solid white;
 }
 
@@ -20,8 +22,8 @@
 
 .foro-textarea {
   width: 98%;
-  color: #ffffff;
-  background-color: rgba(255, 255, 255, 0.1);
+  color: #151d26;
+  background-color: #bdd3ce;
   border: 1px solid #f9fafb;
   border-radius: 20px;
   font-size: 1em;
@@ -32,8 +34,8 @@
 }
 
 .btn-publicar {
-  background-color: #181818;
-  color: #f9fafb;
+  background-color: #bdd3ce;
+  color: #151d26;
   font-weight: 600;
   padding: 10px 20px;
   border-radius: 20px;
@@ -49,11 +51,10 @@
 }
 
 .btn-publicar:hover {
-  background-color: #f9fafb;
-  color: #151d26;
+  background-color: #151d26;
+  color: white;
   transform: translateX(20px);
-  border: 1px solid #151d26;
-
+  border: 1px solid white;
 }
 
 .comentario-item {
@@ -155,9 +156,14 @@
 
 @media screen and (max-width: 768px) {
   .foro {
-    width: 95%;
+    width: 90%;
     padding: 15px;
     margin-top: 20px;
+    margin-bottom: 20px;
+  }
+
+  .foro-textarea {
+    max-width: 480px;
   }
 
   .foro h3 {
@@ -165,14 +171,18 @@
   }
 
   .btn-publicar {
-    width: 100%;
-    max-width: none;
+    max-width: 10em;
+    padding: 5px 10px;
+  }
+
+  .btn-publicar:hover {
+    transform: translateX(10px);
   }
 }
 
 @media screen and (max-width: 480px) {
   .foro {
-    width: 100%;
+    width: 90%;
     border-radius: 10px;
     padding: 10px;
   }
@@ -184,6 +194,7 @@
   .foro-textarea {
     padding: 8px;
     font-size: 0.9em;
+    max-width: 320px;
   }
 
   .comentario-box {
@@ -198,6 +209,15 @@
 
   .icon-button {
     padding: 6px;
+  }
+
+  .btn-publicar {
+    max-width: 5em;
+    padding: 5px 10px;
+  }
+
+  .btn-publicar:hover {
+    transform: translateX(5px);
   }
 }
 

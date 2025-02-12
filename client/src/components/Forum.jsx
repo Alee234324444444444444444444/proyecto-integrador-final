@@ -156,7 +156,7 @@ function Forum() {
 
   return (
     <section className="foro">
-      <h3>Foro de Discusión</h3>
+      <h3>FORO DE DISCUSIÓN</h3>
       {isAuthenticated && (
         <div className="nuevo-comentario">
           <textarea

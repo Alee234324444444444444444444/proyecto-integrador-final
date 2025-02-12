@@ -3,7 +3,7 @@
   justify-content: center;
   align-items: center;
   min-height: 80vh;
-
+  margin-top: 2em;
 }
 
 .register-box {
@@ -14,9 +14,10 @@
 
 .register-box h2 {
   text-align: center;
-  color: #DFFFD6;
-  margin-bottom: 20px;
+  color: white;
+  margin-bottom: 10px;
   font-size: 40px;
+  text-transform: uppercase;
 }
 
 form {
@@ -42,7 +43,6 @@ form {
 
 .input-group input {
   background-color: #ffffff;
-  color: white;
   padding: 10px;
   border: 1px solid #DBE2EF;
   border-radius: 5px;
