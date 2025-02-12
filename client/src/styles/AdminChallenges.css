@@ -2,6 +2,7 @@
     padding: 2rem;
     max-width: 1200px;
     margin: 0 auto;
+    margin-top: 3em;
   }
   
   .admin-tabs {
@@ -30,11 +31,15 @@
   
   /* Estilos del formulario */
   .challenges-section h2{
-    color: #1a1f2e;
+    color: white;
+    text-transform: uppercase;
+    text-align: center;
   }
 
   .adm-ch-h3 {
-    color: #1a1f2e;
+    color: white;
+    text-transform: uppercase;
+    font-size: 1.6em;
   }
 
 

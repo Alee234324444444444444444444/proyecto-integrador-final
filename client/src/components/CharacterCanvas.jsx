@@ -4,7 +4,7 @@ import { useAuth } from '../context/AuthContext';
 import Swal from 'sweetalert2';
 import '../styles/CharacterCanvas.css';
 import spriteSheetPath from '../images/spritesheet.png';
-import backgroundImagePath from '../images/background.jpg';
+import backgroundImagePath from '../images/caracterfound.jpg';
 
 const REWARD_CONFIGS = {
   'hat': {
@@ -91,7 +91,7 @@ function CharacterCanvas() {
         // Esperar a que la imagen se cargue
         await new Promise((resolve) => {
           rewardImage.onload = resolve;
-          rewardImage.onerror = resolve; // Por si hay error en la carga
+          rewardImage.onerror = resolve; 
         });
         
         // Inicializar frames si es una recompensa animada
@@ -300,7 +300,7 @@ function CharacterCanvas() {
   return (
     <div className="character-container">
       <div className="sidebar">
-        <h3>Recompensas Desbloqueadas</h3>
+        <h3>RECOMPENSAS DESBLOQUEADAS</h3>
         {unlockedRewards.map(reward => (
           <div key={reward.id} className="reward-item">
             <p>{reward.name}</p>

@@ -24,7 +24,7 @@ export const PREDEFINED_REWARDS = {
       frameWidth: 1280,
       frameHeight: 1280,
       totalFrames: 2,
-      frameSpeed: 20,
+      frameSpeed: 30,
       renderWidth: 325,
       renderHeight: 325,
       offsetX: 400,

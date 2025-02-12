@@ -10,8 +10,14 @@ import Login from './components/Login';
 import Register from './components/Register';
 import AdminChallenges from './components/AdminChallenges';
 import ReportTable from './components/ReportTable.jsx';
+import Perfil from './components/Perfil.jsx';
 import Posts from './pages/Posts';
 import './index.css';
+import ContextPage from './components/Context.jsx';
+import Footerpages from './components/Footerpages.jsx';
+
+
+
 
 function App() {
   return (
@@ -22,10 +28,15 @@ function App() {
           <Route path="/" element={
             <>
               <Header />
+              <ContextPage />
               <CharacterCanvas />
-              <ChallengesSection />
+              <ChallengesSection /> 
+              <Footerpages />
+              
+              
             </>
           } />
+
           <Route path="/login" element={<Login />} />
           <Route path="/comments" element={<Forum />} />
           <Route path="/challenges" element={<ChallengesSection />} />
@@ -37,6 +48,7 @@ function App() {
               <Posts />
               <Forum />
             </>} />
+            <Route path="/api/perfil" element={<Perfil/>} />
         </Routes>
       </Router>
     </AuthProvider>

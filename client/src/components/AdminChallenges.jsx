@@ -4,6 +4,7 @@ import { useAuth } from '../context/AuthContext';
 import { useNavigate } from 'react-router-dom';
 import '../styles/AdminChallenges.css';
 import { PREDEFINED_REWARDS } from '../rewards';
+import Swal from 'sweetalert2';
 
 const AdminChallenges = () => {
   const { user, isAuthenticated } = useAuth();
@@ -37,6 +38,12 @@ const AdminChallenges = () => {
       setChallenges(response.data);
     } catch (error) {
       console.error('Error al obtener desafíos', error);
+      Swal.fire({
+        icon: 'error',
+        title: 'Error',
+        text: 'No se pudieron cargar los desafíos',
+        confirmButtonColor: '#3085d6'
+      });
     }
   };
 
@@ -48,18 +55,21 @@ const AdminChallenges = () => {
       setPosts(response.data);
     } catch (error) {
       console.error('Error al obtener posts', error);
+      Swal.fire({
+        icon: 'error',
+        title: 'Error',
+        text: 'No se pudieron cargar las publicaciones',
+        confirmButtonColor: '#3085d6'
+      });
     }
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      console.log('Enviando datos:', formData); // Para debug
-  
       const selectedReward = Object.values(PREDEFINED_REWARDS)
         .find(reward => reward.id === formData.rewardType);
   
-      // Crear el objeto de datos a enviar
       const challengeData = {
         title: formData.title,
         description: formData.description,
@@ -67,7 +77,6 @@ const AdminChallenges = () => {
         due_date: formData.due_date
       };
   
-      // Si hay una recompensa seleccionada, añadir su información
       if (selectedReward) {
         challengeData.rewardName = selectedReward.name;
         challengeData.rewardType = selectedReward.id;
@@ -87,9 +96,13 @@ const AdminChallenges = () => {
         }
       );
       
-      console.log('Respuesta:', response.data); // Para debug
+      await Swal.fire({
+        icon: 'success',
+        title: '¡Éxito!',
+        text: 'Desafío creado correctamente',
+        confirmButtonColor: '#3085d6'
+      });
   
-      // Limpiar el formulario y actualizar la lista
       fetchChallenges();
       setFormData({
         title: '',
@@ -101,7 +114,12 @@ const AdminChallenges = () => {
   
     } catch (error) {
       console.error('Error al crear desafío', error);
-      alert('No se pudo crear el desafío');
+      Swal.fire({
+        icon: 'error',
+        title: 'Error',
+        text: 'No se pudo crear el desafío',
+        confirmButtonColor: '#3085d6'
+      });
     }
   };
 
@@ -118,14 +136,39 @@ const AdminChallenges = () => {
   };
 
   const handleDelete = async (challengeId) => {
-    if (window.confirm('¿Estás seguro de que quieres eliminar este desafío?')) {
+    const result = await Swal.fire({
+      title: '¿Estás seguro?',
+      text: "Esta acción no se puede deshacer",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Sí, eliminar',
+      cancelButtonText: 'Cancelar'
+    });
+
+    if (result.isConfirmed) {
       try {
         await axios.delete(`http://localhost:3000/api/challenges/${challengeId}`, {
           headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
         });
+        
+        await Swal.fire({
+          icon: 'success',
+          title: '¡Eliminado!',
+          text: 'El desafío ha sido eliminado.',
+          confirmButtonColor: '#3085d6'
+        });
+        
         fetchChallenges();
       } catch (error) {
         console.error('Error al eliminar desafío', error);
+        Swal.fire({
+          icon: 'error',
+          title: 'Error',
+          text: 'No se pudo eliminar el desafío',
+          confirmButtonColor: '#3085d6'
+        });
       }
     }
   };
@@ -145,6 +188,13 @@ const AdminChallenges = () => {
         }
       );
       
+      await Swal.fire({
+        icon: 'success',
+        title: '¡Actualizado!',
+        text: 'El desafío ha sido actualizado correctamente',
+        confirmButtonColor: '#3085d6'
+      });
+      
       setEditingChallenge(null);
       fetchChallenges();
       setFormData({
@@ -157,25 +207,58 @@ const AdminChallenges = () => {
       });
     } catch (error) {
       console.error('Error al actualizar desafío', error);
+      Swal.fire({
+        icon: 'error',
+        title: 'Error',
+        text: 'No se pudo actualizar el desafío',
+        confirmButtonColor: '#3085d6'
+      });
     }
   };
 
   const handlePostStatus = async (postId, newStatus) => {
-    try {
-      await axios.patch(
-        `http://localhost:3000/api/posts/${postId}/status`,
-        { 
-          status: newStatus,
-          approved_by: user.id
-        },
-        {
-          headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
-        }
-      );
-      fetchPosts();
-    } catch (error) {
-      console.error('Error al actualizar estado del post', error);
-      alert('Error al actualizar el estado');
+    const actionText = newStatus === 'approved' ? 'aprobar' : 'rechazar';
+    
+    const result = await Swal.fire({
+      title: `¿Estás seguro de ${actionText} esta publicación?`,
+      icon: 'question',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Sí, confirmar',
+      cancelButtonText: 'Cancelar'
+    });
+
+    if (result.isConfirmed) {
+      try {
+        await axios.patch(
+          `http://localhost:3000/api/posts/${postId}/status`,
+          { 
+            status: newStatus,
+            approved_by: user.id
+          },
+          {
+            headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
+          }
+        );
+
+        await Swal.fire({
+          icon: 'success',
+          title: '¡Actualizado!',
+          text: `La publicación ha sido ${newStatus === 'approved' ? 'aprobada' : 'rechazada'} correctamente`,
+          confirmButtonColor: '#3085d6'
+        });
+
+        fetchPosts();
+      } catch (error) {
+        console.error('Error al actualizar estado del post', error);
+        Swal.fire({
+          icon: 'error',
+          title: 'Error',
+          text: 'No se pudo actualizar el estado de la publicación',
+          confirmButtonColor: '#3085d6'
+        });
+      }
     }
   };
 
@@ -199,7 +282,7 @@ const AdminChallenges = () => {
       {activeTab === 'challenges' ? (
         <div className="challenges-section">
           <h2>Crear Nuevo Desafío</h2>
-          <form onSubmit={handleSubmit} className="challenge-form">
+          <form onSubmit={editingChallenge ? handleUpdate : handleSubmit} className="challenge-form">
             <div className="form-group">
               <input
                 type="text"
@@ -233,22 +316,26 @@ const AdminChallenges = () => {
                 onChange={(e) => setFormData({ ...formData, due_date: e.target.value })}
               />
             </div>
-            <div className="form-group">
-              <label>Seleccionar Recompensa</label>
-              <select
-                value={formData.rewardType}
-                onChange={(e) => setFormData({ ...formData, rewardType: e.target.value })}
-                required
-              >
-              <option value="">Seleccionar Recompensa</option>
-              {Object.entries(PREDEFINED_REWARDS).map(([key, reward]) => (
-                <option key={reward.id} value={reward.id}>
-                  {reward.name}
-                </option>
-                ))}
-              </select>
-            </div>
-            <button type="submit" className="submit-button">Añadir Desafío</button>
+            {!editingChallenge && (
+              <div className="form-group">
+                <label>Seleccionar Recompensa</label>
+                <select
+                  value={formData.rewardType}
+                  onChange={(e) => setFormData({ ...formData, rewardType: e.target.value })}
+                  required
+                >
+                  <option value="">Seleccionar Recompensa</option>
+                  {Object.entries(PREDEFINED_REWARDS).map(([key, reward]) => (
+                    <option key={reward.id} value={reward.id}>
+                      {reward.name}
+                    </option>
+                  ))}
+                </select>
+              </div>
+            )}
+            <button type="submit" className="submit-button">
+              {editingChallenge ? 'Actualizar Desafío' : 'Añadir Desafío'}
+            </button>
           </form>
 
           <h3 className="adm-ch-h3">Lista de Desafíos</h3>

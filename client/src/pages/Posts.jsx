@@ -30,6 +30,8 @@ function Posts() {
   };
 
   const handleStatusChange = async (postId, newStatus) => {
+    if (!user?.isSuperuser) return;
+    
     try {
       const token = localStorage.getItem('token');
       await axios.patch(`http://localhost:3000/api/posts/${postId}/status`, 
@@ -71,7 +73,7 @@ function Posts() {
       )}
 
       <section className="all-posts-section">
-        <h2>Todas las Publicaciones</h2>
+        <h2>TODAS LAS PUBLICACIONES</h2>
         <div className="posts-grid">
           {allPosts
             .filter(post => post.status === 'approved')

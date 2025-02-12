@@ -39,7 +39,7 @@ const Challenges = () => {
 
   return (
     <div className="challenges-container">
-      <h2>Desafíos</h2>
+      <h2>DESAFÍOS</h2>
       <ul>
         {challenges.length > 0 ? (
           challenges.map((challenge) => (
